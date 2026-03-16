@@ -1,0 +1,61 @@
+.trackCard {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px; 
+    border-radius: 6px;
+    gap: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.trackCard:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.albumImage {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.trackDetails {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.trackName {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trackArtists {
+    color: #b3b3b3;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trackMeta {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+}
+
+.duration {
+    color: #b3b3b3;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}

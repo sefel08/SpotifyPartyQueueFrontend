@@ -1,0 +1,79 @@
+.container {
+    padding: 32px;
+    width: 100%;
+    box-sizing: border-box;
+    color: white;
+}
+
+.backButton {
+    background-color: transparent;
+    border: 1px solid #b3b3b3;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 32px;
+    transition: all 0.2s ease;
+}
+
+.backButton:hover {
+    border-color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.header {
+    display: flex;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.playlistImage {
+    width: 232px;
+    height: 232px;
+    object-fit: cover;
+    box-shadow: 0 4px 60px rgba(0,0,0,0.5);
+    border-radius: 4px;
+}
+
+.playlistInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.upperTitle {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.playlistName {
+    font-size: 72px;
+    font-weight: 900;
+    margin: 0 0 16px 0;
+    letter-spacing: -2px;
+}
+
+.playlistStats {
+    font-size: 14px;
+    color: white;
+    margin: 0;
+}
+
+.playlistStats strong {
+    color: white;
+}
+
+.tracksList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.loadingText {
+    color: #b3b3b3;
+    padding: 100px;
+    text-align: center;
+    font-size: 1.2rem;
+}
