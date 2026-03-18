@@ -4,7 +4,7 @@ import MainBox from '../components/MainBox';
 import Queuebar from '../components/Queuebar';
 import styles from './UserView.module.css';
 
-const UserView = () => {
+const UserView = ({ goBackToViewSelection }) => {
     const [currentView, setCurrentView] = useState('search'); // 'search' lub 'playlist'
     const [selectedPlaylist, setSelectedPlaylistData] = useState(null);
 
@@ -19,7 +19,7 @@ const UserView = () => {
     return (
         <div className={styles.container}>
             <nav className={styles.sidebarNav}>
-                <Sidebar onPlaylistSelect={handlePlaylistSelect} />
+                <Sidebar onPlaylistSelect={handlePlaylistSelect} onGoBack={goBackToViewSelection} />
             </nav>
 
             <main className={styles.mainContent}>

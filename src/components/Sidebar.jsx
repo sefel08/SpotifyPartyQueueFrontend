@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import styles from './Sidebar.module.css';
 import UserProfile from './UserProfile';
 
-const Sidebar = ({ onPlaylistSelect }) => {
+const Sidebar = ({ onPlaylistSelect, onGoBack }) => {
   const { authorized, user, login } = useAuth();
   const [playlists, setPlaylists] = useState([]);
 
@@ -33,6 +33,7 @@ const Sidebar = ({ onPlaylistSelect }) => {
       
       <UserProfile user={user} authorized={authorized} login={login} />
 
+      {/* playlist cards */}
       <div className={styles.grid}>
         {playlists.map(playlist => (
           <div 
@@ -53,6 +54,13 @@ const Sidebar = ({ onPlaylistSelect }) => {
           </div>
         ))}
       </div>
+
+      <div className={styles.footer}>
+        <button className={styles.backButton} onClick={onGoBack}>
+          ← Zmień widok
+        </button>
+      </div>
+
     </div>
   );
 };
