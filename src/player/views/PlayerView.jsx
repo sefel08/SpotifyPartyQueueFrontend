@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../global/views/contexts/AuthContext';
+import { useAuth } from '../../global/contexts/AuthContext';
 
 const PlayerView = () => {
   const { authorized, loading, login, user } = useAuth();

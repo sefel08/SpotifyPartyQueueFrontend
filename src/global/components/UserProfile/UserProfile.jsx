@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './UserProfile.module.css';
-import default_avatar_image from '../assets/default_image.png';
+import default_avatar_image from '../../../assets/spotify_icon.png';
 
 const UserProfile = ({ user, authorized, login }) => { 
     return (

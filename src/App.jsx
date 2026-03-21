@@ -1,5 +1,5 @@
-import Dashboard from './Dashboard';
-import { AuthProvider } from './contexts/AuthContext';
+import Dashboard from './global/views/Dashboard';
+import { AuthProvider } from './global/contexts/AuthContext';
 
 function App() {
   return (

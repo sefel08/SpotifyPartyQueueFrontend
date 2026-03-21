@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TrackCard from '../../../global/components/TrackCard/TrackCard';
 import styles from './PlaylistDetailView.module.css';
-import defaultImage from '../assets/default_image.png';
+import defaultImage from '../../../assets/spotify_icon.png';
 
 const PlaylistDetailsView = ({ selectedPlaylist, onBack, onTrackClick }) => {
     

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar/Sidebar';
-import MainBox from '../../components/MainBox';
+import MainBox from '../components/Mainbox/MainBox';
 import Queuebar from '../../global/components/Queuebar/Queuebar';
 import styles from './UserView.module.css';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import PlayerView from './views/PlayerView';
-import UserView from './views/UserView';
-import SelectView from './views/SelectView';
+import SelectView from './SelectView';
+import PlayerView from '../../player/views/PlayerView';
+import UserView from '../../user/views/UserView';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState(() => {
