@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .playerViewContainer {
   width: 100vw;
   height: 100vh;
@@ -8,9 +12,12 @@
   overflow: hidden;
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center; 
   font-family: 'Montserrat', sans-serif;
+  /* space for navbar */
+  padding-bottom: clamp(60px, 8vh, 90px)
 }
 
 /* JOIN PANEL */
@@ -51,7 +58,7 @@
 .textCodes {
   display: flex;
   flex-direction: column;
-  gap: 1.2vh;
+  gap: 0vh;
 }
 
 .codeLabel {
@@ -74,6 +81,29 @@
   font-weight: 900;
   margin: 0;
   letter-spacing: 3px;
+}
+
+@media (max-width: 600px) {
+  .joinPanel {
+    position: static;
+    width: 85vw;
+    height: auto;
+    flex-direction: row;
+    margin-top: 2vh;
+    padding: 1.5vh 0;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .qrContainer {
+    width: clamp(60px, 12vh, 100px); 
+    min-width: 60px;
+  }
+
+  .textCodes {
+    text-align: left;
+    gap: 0.5vh;
+  }
 }
 
 /* MAIN PLAYER */
@@ -122,17 +152,17 @@
 .playbackBar {
   display: flex;
   align-items: center;
-  gap: clamp(20px, 2vw, 60px);
+  gap: clamp(20px, 2vh, 60px);
   width: 150%;
   max-width: 98vw;
   margin-top: 2vh;
 }
 
 .timeLabel {
-  font-size: clamp(14px, 2vw, 42px); 
+  font-size: clamp(14px, 2vh, 40px); 
   color: #a7a7a7;
   font-family: 'Roboto Mono', monospace;
-  width: clamp(60px, 6vw, 100px); 
+  width: clamp(60px, 6vh, 100px); 
 }
 
 .timeLabel:first-child { text-align: right; }

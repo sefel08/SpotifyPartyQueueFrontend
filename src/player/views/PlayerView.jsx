@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from './PlayerView.module.css';
-import Queuebar from '../../global/components/Queuebar/Queuebar';
 import { useAuth } from '../../global/contexts/AuthContext';
-
 import image from '../../assets/spotify_icon.png';
+import Navbar from '../../global/components/Navbar/Navbar';
 
 const PlayerView = () => {
   const { authorized, loading, login, user } = useAuth();
@@ -16,8 +15,8 @@ const PlayerView = () => {
       albumCover: "https://i.scdn.co/image/ab67616d00001e02a0bddede36c718a8f58b33ae",
       durationMs: 200000, // 3:20
   });
-  
   const [progressMs, setProgressMs] = useState(34000);
+
   const [partyCode, setPartyCode] = useState("ROCK-WAVE-99");
   const [joinPassword, setJoinPassword] = useState('1462');
 
@@ -50,7 +49,7 @@ const PlayerView = () => {
   return (
     <div className={styles.playerViewContainer}>
       
-      {/* 1. BOX DO DOŁĄCZENIA (Pionowy, prawy górny róg) */}
+      {/* JOIN BOX */}
       <div className={styles.joinPanel}>
         <div className={styles.qrContainer}>
           <img src={image} alt="QR Code" className={styles.qrImage} />
@@ -69,7 +68,7 @@ const PlayerView = () => {
         </div>
       </div>
 
-      {/* 2. GŁÓWNY ODTWARZACZ (Wszystko w jednym divie dla skalowania) */}
+      {/* MAIN PLAYER */}
       <div className={styles.centralPlayer}>
         
         <img 
@@ -97,6 +96,11 @@ const PlayerView = () => {
         </div>
 
       </div>
+
+      {/* NAV PANEL */}
+      {true ? (
+        <Navbar tabs={['Kolejka', 'Widok użytkownika']} />
+      ) : null }
 
     </div>
   );
