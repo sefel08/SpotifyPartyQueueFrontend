@@ -1,42 +1,139 @@
 .container {
+    position: relative;
     display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
     overflow: hidden;
     background-color: #000;
 }
 
-.sidebarNav {
-    width: 300px;
-    min-width: 300px;
-    background-color: #000;
-    color: white;
+.header {
+    width: 100%;
+    height: 6vh;
+    height: 6dvh;
     display: flex;
-    flex-direction: column;
-    border-right: 1px solid #282828;
+    gap: 6px;
+    align-items: center;
+    justify-items: center;
+    padding: 0 1vh;
+    background-color: var(--spotify-dark-gray);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0 0 20px 20px;
+}
+
+.triggerBtn {
+    height: 4.5vh;
+    padding: 0 16px;
+    border-radius: 15px;
+    font-size: 24px;
+    justify-content: center;
+}
+.headerButton {
+    flex: 1;
+    height: 3.5vh;
+    background-color: var(--spotify-green); 
+    color: #000;
+    border-radius: 15px;
+    padding: 8px 10px;
+    line-height: 14px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.sidebarNav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    z-index: 2000;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebarNav.active {
+    transform: translateX(0);
 }
 
 .mainContent {
     flex: 1;
-    background-color: #121212;
-    color: white;
-    padding: 40px;
+    background-color: var(--spotify-black);
+    color: var(--spotify-white);
+    padding: 2vh;
     overflow-y: auto;
+    border-radius: 20px;
 }
 
-.mainContent::-webkit-scrollbar {
-    width: 12px;
+.showQueueBtn {
+    position: absolute;
+    bottom: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1000;
 }
 
-.mainContent::-webkit-scrollbar-thumb {
-    background-color: #4f4f4f;
-    border-radius: 6px;
-    border: 3px solid #121212;
+.queueContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 85vh;
+    height: 85dvh;
+    z-index: 3000;
+    transform: translateY(100%);
+    transition: transform 0.25s ease-out;
+    border-radius: 30px 30px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.queueContainer.active {
+    transform: translateY(0);
 }
 
-.queueNav {
-    width: 300px;
-    min-width: 300px;
-    background-color: #000;
-    border-left: 1px solid #282828;
+.queueTopBar {
+    width: 100vw;
+    height: 5vh;
+    height: 5dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3dvh;
+    font-size: 3vh;
+
+    background: linear-gradient(to top,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 0.75) 25%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0.4) 60%,
+        rgba(0, 0, 0, 0.2) 80%,
+        rgba(0, 0, 0, 0.05) 92%,
+        transparent 100%
+    );
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebarNav, .queueContainer {
+    background-color: var(--spotify-dark-gray);
 }

@@ -1,0 +1,167 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem;
+    padding-bottom: 5rem;
+    box-sizing: border-box;
+}
+
+.header {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-top: 0.3rem;
+    margin-bottom: 1rem;
+    color: var(--spotify-white);
+    letter-spacing: -0.04rem;
+}
+
+.subHeader {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--spotify-white);
+}
+
+.searchBox {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0; 
+    background-color: var(--spotify-black);
+    padding: 1rem 0;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input {
+    flex: 1;
+    min-width: 0;
+    background-color: #242424;
+    border: 1px solid transparent;
+    border-radius: 2rem;
+    padding: 0.8rem 1.2rem;
+    color: var(--spotify-white);
+    font-size: 1rem;
+    outline: none;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.input:focus {
+    background-color: #2a2a2a;
+    border-color: var(--spotify-light-gray);
+}
+
+.input::placeholder {
+    color: var(--spotify-light-gray);
+}
+
+.button {
+    background-color: var(--spotify-green);
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0 1.5rem;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.button:hover {
+    background-color: var(--spotify-green-hover);
+    transform: scale(1.04);
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+.button:focus {
+    outline: none;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cardImagePlaceholder {
+    width: 48px;
+    height: 48px;
+    background-color: #282828;
+    flex-shrink: 0;
+}
+
+.cardTitle {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    padding-right: 0.5rem;
+}
+
+.stickyHeader {
+    position: sticky;
+    top: -1rem;
+    background-color: var(--spotify-black);
+    z-index: 20;
+    padding: 1rem 0;
+}
+
+.filterBar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.chip {
+    background-color: #282828;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.activeChip {
+    background-color: var(--spotify-green);
+    color: black;
+}
+
+.emptyMessage {
+    color: var(--spotify-light-gray);
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+}

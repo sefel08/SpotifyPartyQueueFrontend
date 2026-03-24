@@ -1,11 +1,10 @@
 .navbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100vw;
   height: clamp(60px, 8vh, 80px);
-  background-color: #121212;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  height: clamp(60px, 8dvh, 80px);
+  background-color: var(--spotify-dark-gray);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px 20px 0 0;
   display: flex;
   z-index: 1000;
   box-sizing: border-box;
@@ -31,43 +30,13 @@
   height: 100%;
   background: transparent;
   border: none;
-  color: #b3b3b3;
+  color: var(--spotify-light-gray);
   font-family: 'Montserrat', sans-serif;
   font-size: clamp(12px, 1.4vh, 24px);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  
+  letter-spacing: 1px;  
   display: flex;
   justify-content: center;
   align-items: center;
-  
-  transition: all 0.2s ease-in-out;
-  position: relative;
-}
-
-.navButton:hover {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.navButton:active, .navButton:focus {
-  background-color: rgba(255, 255, 255, 0.1);
-  outline: none;
-  color: #1DB954;
-}
-
-.navButton::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  width: 0;
-  height: 3px;
-  background-color: #1DB954;
-  transition: width 0.3s ease;
-}
-
-.navButton:hover::after {
-  width: 40%;
 }

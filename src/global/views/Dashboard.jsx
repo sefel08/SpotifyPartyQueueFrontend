@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SelectView from './SelectView';
 import PlayerView from '../../player/views/PlayerView';
 import UserView from '../../user/views/UserView';
+import Navbar from '../components/Navbar/Navbar';
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState(() => {

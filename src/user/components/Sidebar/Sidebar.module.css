@@ -1,43 +1,22 @@
 .sidebarContainer {
     padding: 20px;
-    text-align: center;
     background-color: #121212;
     min-height: 100vh;
-}
-
-.authStatus {
-    padding: 10px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.statusSuccess { color: #1DB954; }
-.statusError { color: #e91429; }
-
-.loginButton {
-    padding: 10px 20px;
-    background-color: #1DB954;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.2s ease;
-}
-
-.loginButton:hover {
-    transform: scale(1.05);
-    background-color: #1ed760;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     padding: 10px 0;
     width: 100%;
     box-sizing: border-box;
+    flex: 1; 
+    overflow-y: auto;
 }
 
 .playlistCard {
@@ -52,7 +31,6 @@
     gap: 12px;
     transition: background-color 0.3s ease;
 }
-
 .playlistCard:hover {
     background-color: #282828;
 }
@@ -89,4 +67,34 @@
     font-size: 12px;
     margin: 4px 0 0 0;
     text-align: left;
+}
+
+.footer {
+    padding-top: 20px;
+    margin-top: auto;
+    border-top: 1px solid #282828;
+    width: 100%;
+}
+
+.backButton {
+    background: transparent;
+    border: none;
+    color: #b3b3b3;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    transition: color 0.2s ease, transform 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+.backButton:hover {
+    color: #ffffff;
+    transform: translateX(-4px); 
+}
+.backButton:active {
+    transform: scale(0.98);
 }

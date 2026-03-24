@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TrackCard from '../../../global/components/TrackCard/TrackCard';
-import styles from './SearchView.module.css';
+import styles from './SubViewsStyle.module.css';
 
 const SearchView = ({ onTrackClick }) => {
     const [inputText, setInputText] = useState('');
