@@ -34,13 +34,17 @@
 .headerButton {
     flex: 1;
     height: 3.5vh;
-    background-color: var(--spotify-green); 
-    color: #000;
+    background-color: var(--spotify-dark-gray); 
+    color: var(--spotify-white);
     border-radius: 15px;
     padding: 8px 10px;
     line-height: 14px;
     font-weight: 600;
     font-size: 12px;
+}
+.activeHeaderButton {
+    background-color: var(--spotify-green);
+    color: #000;
 }
 
 .sidebarNav {

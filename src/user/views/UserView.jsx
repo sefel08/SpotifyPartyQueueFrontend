@@ -11,7 +11,7 @@ import Navbar from '../../global/components/Navbar/Navbar';
 const UserView = ({ goBackToViewSelection }) => {
     const { user, authorized, login } = useAuth();
     
-    const [currentView, setCurrentView] = useState('home');
+    const [currentSubView, setCurrentSubView] = useState('home');
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [isQueueOpen, setQueueOpen] = useState(false);
     
@@ -22,7 +22,7 @@ const UserView = ({ goBackToViewSelection }) => {
 
     const handlePlaylistSelect = (playlistData) => {
         setSelectedPlaylistData(playlistData);
-        setCurrentView('playlist');
+        setCurrentSubView('playlist');
     };
 
     return (
@@ -31,15 +31,15 @@ const UserView = ({ goBackToViewSelection }) => {
             {/* Header */}
             <header className={styles.header}>
                 <button className={styles.triggerBtn} onClick={() => setSidebarOpen(true)}>☰</button>
-                <button className={styles.headerButton} onClick={() => setCurrentView('home')}>Home</button>
-                <button className={styles.headerButton} onClick={() => setCurrentView('library')}>Biblioteka</button>
-                <button className={styles.headerButton} onClick={() => setCurrentView('search')}>Search</button>
+                <button className={`${styles.headerButton} ${currentSubView === 'home' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('home')}>Home</button>
+                <button className={`${styles.headerButton} ${currentSubView === 'library' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('library')}>Biblioteka</button>
+                <button className={`${styles.headerButton} ${currentSubView === 'search' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('search')}>Search</button>
                 {/* <button className={styles.triggerBtn} onClick={() => setSidebarOpen(true)}>☷</button> */}
             </header>
 
             {/* Main Content */}
             <main className={styles.mainContent}>
-                <MainBox currentView={currentView} selectedPlaylist={selectedPlaylist} setView={setCurrentView} />
+                <MainBox currentView={currentSubView} selectedPlaylist={selectedPlaylist} setView={setCurrentSubView} />
                 <button className={styles.showQueueBtn} onClick={() => setQueueOpen(true)}>Pokaż kolejkę</button>
             </main>
 
