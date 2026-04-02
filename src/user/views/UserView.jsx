@@ -29,11 +29,10 @@ const UserView = ({ goBackToViewSelection }) => {
             
             {/* Header */}
             <header className={styles.header}>
-                <button className={styles.triggerBtn} onClick={() => setSidebarOpen(true)}>☰</button>
+                <button className={styles.sidebarBtn} onClick={() => setSidebarOpen(true)}>☰</button>
                 <button className={`${styles.headerButton} ${currentSubView === 'home' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('home')}>Home</button>
                 <button className={`${styles.headerButton} ${currentSubView === 'library' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('library')}>Biblioteka</button>
                 <button className={`${styles.headerButton} ${currentSubView === 'search' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('search')}>Search</button>
-                {/* <button className={styles.triggerBtn} onClick={() => setSidebarOpen(true)}>☷</button> */}
             </header>
 
             {/* Main Content */}
@@ -41,8 +40,6 @@ const UserView = ({ goBackToViewSelection }) => {
                 <MainBox userName={user.name} currentView={currentSubView} lastView={lastView} setView={handleViewChange} />
                 <button className={styles.showQueueBtn} onClick={() => setQueueOpen(true)}>Pokaż kolejkę</button>
             </main>
-
-            <Navbar tabs={["Player", "Home", "Settings", "Party"]}/>
 
             {/* Hidden Items */}
 

@@ -8,7 +8,6 @@ const PlayerView = () => {
   const { authorized, loading, login, user } = useAuth();
   const [partyId, setPartyId] = useState(null);
 
-  // --- MOCKOWE DANE (Do zastąpienia logiką z backendu/Spotify API) ---
   const [currentTrack, setCurrentTrack] = useState({
       title: "Blinding Lights",
       artist: "The Weeknd",
@@ -84,23 +83,16 @@ const PlayerView = () => {
 
         <div className={styles.playbackBar}>
           <span className={styles.timeLabel}>{formatTime(progressMs)}</span>
-          
           <div className={styles.progressBarBg}>
             <div 
               className={styles.progressBarFill} 
               style={{ width: `${progressPercent}%` }}
             ></div>
           </div>
-          
           <span className={styles.timeLabel}>{formatTime(currentTrack.durationMs)}</span>
         </div>
 
       </div>
-
-      {/* NAV PANEL */}
-      {true ? (
-        <Navbar tabs={['Kolejka', 'Widok użytkownika']} />
-      ) : null }
 
     </div>
   );

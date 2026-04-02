@@ -3,15 +3,14 @@
     flex-direction: column;
     width: 100%;
     padding: 1rem;
-    padding-bottom: 2rem;
     box-sizing: border-box;
 }
 
 .header {
     font-size: 2rem;
     font-weight: 800;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.8rem;
     color: var(--spotify-white);
     letter-spacing: -0.04rem;
 }
@@ -49,10 +48,6 @@
     transition: background-color 0.3s ease;
 }
 
-.card:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
 .cardImagePlaceholder {
     width: 48px;
     height: 48px;
@@ -69,10 +64,15 @@
 
 .stickyHeader {
     position: sticky;
-    top: -1rem;
-    background-color: var(--spotify-black);
+    top: -0.5rem;
+    padding-bottom: 0.5rem;
+    background: linear-gradient(
+        to bottom, 
+        var(--spotify-black) 0%, 
+        var(--spotify-black) 90%, 
+        transparent 100%
+    );    
     z-index: 20;
-    padding: 1rem 0;
 }
 
 .filterBar {

@@ -36,7 +36,7 @@ const SearchView = ({ scrollRef, onTrackClick, setSearchQuery, searchQuery, sear
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.header}>Szukaj piosenek</h1>
+            <h1 className={styles.header} style={{ marginBottom: '0.3rem' }}>Szukaj piosenek</h1>
             
             <SearchBox onSearch={setSearchQuery} />
 

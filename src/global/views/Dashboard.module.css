@@ -1,0 +1,12 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+    gap: 1.5dvh;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #000;
+}

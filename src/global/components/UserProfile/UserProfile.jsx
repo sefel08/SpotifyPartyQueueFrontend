@@ -1,8 +1,12 @@
 import React from 'react';
 import styles from './UserProfile.module.css';
 import default_avatar_image from '../../../assets/spotify_icon.png';
+import { useAuth } from '../../contexts/AuthContext';
 
-const UserProfile = ({ user, authorized, login }) => { 
+const UserProfile = () => { 
+    
+    const { user, authorized, login } = useAuth();
+
     return (
         <div 
         className={`${styles.profileCard} ${!authorized ? styles.loginPointer : ''}`} 

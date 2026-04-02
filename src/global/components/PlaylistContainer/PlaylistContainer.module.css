@@ -1,0 +1,49 @@
+.playlistContainer {
+    position: relative;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+    /* max 3 rows (card min-height, gap height) */
+    max-height: calc((4rem * 3) + (0.75rem * 2));
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.loggedOut {
+    padding: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    max-height: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;    
+}
+.loggedOutCard {
+    filter: blur(3px);
+    background-color: var(--spotify-dark-gray);
+    height: 4rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+.loggedOutCardImage {
+    width: 40%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.logOutMessage {
+    color: #b3b3b3;
+    text-align: center;
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    width: 80%;
+
+    background: rgba(0,0,0,0.2);
+    padding: 10px 20px; 
+    border-radius: 3rem;
+    backdrop-filter: blur(8px);
+}

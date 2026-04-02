@@ -1,49 +1,64 @@
 .container {
   display: flex;
+  ;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: min(5vw, 50px);
+
   width: 100vw;
-  min-height: 100vh;
+  height: 100%;
+
   margin: 0;
-  padding: 0;
+  padding: 5vw;
+
   background-color: #121212;
   box-sizing: border-box;
 }
 
 .card {
-  width: 250px;
-  height: 300px;
+  flex: 1;
+  height: 40%;
+
+  padding: 5vw;
   background-color: #181818;
   border-radius: 12px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  padding: 20px;
   border: none;
 }
-
 .card:hover {
   background-color: #282828;
   transform: translateY(-5px);
 }
 
-.icon {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  color: #1DB954;
+@media (max-width: 500px) {
+  .container {
+    flex-direction: column;
+    padding: 10vw;
+  }
+  .card {
+    width: 100%;
+    padding: 10vw;
+  }
 }
 
+.icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color: #1DB954;
+}
 .title {
   color: white;
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 10px;
 }
-
 .description {
   color: #b3b3b3;
   text-align: center;

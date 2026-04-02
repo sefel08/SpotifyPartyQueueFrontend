@@ -1,9 +1,14 @@
 import React from 'react';
 import styles from './SubViewsStyle.module.css';
 import PlaylistCard from '../../../global/components/PlaylistCard/PlaylistCard';
+import { useAuth } from '../../../global/contexts/AuthContext';
+import UserProfile from '../../../global/components/UserProfile/UserProfile';
 
 const LibraryView = ({ userPlaylists, onPlaylistSelect }) => {
-    return (
+
+    const { authorized, login } = useAuth();
+
+    return (authorized ? 
         <div className={styles.container}>
             <header className={styles.stickyHeader}>
                 <h1 className={styles.header}>Twoja Biblioteka</h1>
@@ -21,7 +26,19 @@ const LibraryView = ({ userPlaylists, onPlaylistSelect }) => {
                 ))}
             </div>
         </div>
-    );
+
+        :
+
+        <div className={styles.container}>
+            {/* <h1 className={styles.header}>Twoja Biblioteka</h1> */}
+            <div style={{ marginTop: '1rem', width: '50%', alignSelf: 'center' }}>
+                <UserProfile />
+            </div>
+            <p style={{ textAlign: 'center' }}>
+                Aby zobaczyć swoją bibliotekę muzyczną.
+            </p>
+        </div>
+    )
 };
 
 export default LibraryView;

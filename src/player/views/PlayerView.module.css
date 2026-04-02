@@ -1,23 +1,24 @@
-* {
-  box-sizing: border-box;
+body {
+  background-color: var(--spotify-black);
 }
 
 .playerViewContainer {
+  position: relative;
   width: 100vw;
-  height: 100vh;
-  background-color: #121212;
-  color: #ffffff;
+  height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  position: relative;
+  
   display: flex;
+  gap: 1rem;
   flex-direction: column;
   justify-content: center;
   align-items: center; 
+
+  background-color: var(--spotify-black);
+  color: #ffffff;
   font-family: 'Montserrat', sans-serif;
-  /* space for navbar */
-  padding-bottom: clamp(60px, 8vh, 90px)
 }
 
 /* JOIN PANEL */
@@ -108,18 +109,16 @@
 
 /* MAIN PLAYER */
 .centralPlayer {
-  display: flex;
-  flex-direction: column;
-  
-  align-items: center;
-  justify-content: center;  
-
   width: 90vw;
   max-width: min(85vw, 60vh); 
-  height: 100vh;
-
-  gap: 4vh;
+  height: 100%;
   z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: center;
+  justify-content: center;  
 }
 
 .albumCover {
@@ -144,7 +143,9 @@
 .trackArtist {
   font-size: clamp(18px, 3vh, 46px);
   color: #b3b3b3;
+  margin: 0;
   margin-top: 1.5vh;
+  margin-top: 1.5dvh;
   font-weight: 400;
 }
 
@@ -155,7 +156,8 @@
   gap: clamp(20px, 2vh, 60px);
   width: 150%;
   max-width: 98vw;
-  margin-top: 2vh;
+  margin-top: 1vh;
+  margin-top: 1dvh;
 }
 
 .timeLabel {
@@ -164,10 +166,8 @@
   font-family: 'Roboto Mono', monospace;
   width: clamp(60px, 6vh, 100px); 
 }
-
 .timeLabel:first-child { text-align: right; }
 .timeLabel:last-child { text-align: left; }
-
 .progressBarBg {
   flex: 1;
   height: clamp(6px, 0.8vh, 14px);
@@ -175,7 +175,6 @@
   border-radius: 6px;
   overflow: hidden;
 }
-
 .progressBarFill {
   height: 100%;
   background-color: #ffffff;
