@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import styles from './SelectView.module.css';
 import Slider from '../components/Slider/Slider';
 import { useAuth } from '../contexts/AuthContext';
-import { usePlayer } from '../../player/contexts/PlayerContext';
+import { useParty } from '../contexts/PartyContext';
 
-const SelectView = ({ setCurrentView, setNavbarTabs }) => {
+const SelectView = ({ setNavbarTabs }) => {
 
-    const { spotifyAuthorized, login, loginAsGuest, user } = useAuth();
-    const { setPartyId } = usePlayer();
+    const { spotifyAuthorized, login, loginAsGuest } = useAuth();
+    const { createPartySession, joinPartySession, createPartySessionAndJoin, partyId } = useParty();
 
     // global states
     const [acceptedCookies, setAcceptedCookies] = useState(() => localStorage.getItem('acceptedCookies') === 'true' );
@@ -22,47 +22,50 @@ const SelectView = ({ setCurrentView, setNavbarTabs }) => {
 
     // user view states
     const [isGuest, setIsGuest] = useState(false);
-    const [nickname, setNickname] = useState(() => localStorage.getItem('guestNickname') || '' );
+    const [nickname, setNickname] = useState(() => localStorage.getItem('nickname') || '' );
+    const [nicknameSubmitted, setNicknameSubmitted] = useState(false);
+    const [enteredPartyId, setEnteredPartyId] = useState(() => localStorage.getItem('enteredPartyId') || '' );
 
-    // all things selected
-    useEffect(() => {
-        if(
-            (acceptedCookies && selectedView) && // nessesary options to go further
-            (
-                (spotifyAuthorized && anotherView && hostOption && voteToSkipOption && (specifiedPercentage !== -1 || specifiedNumber !== -1)) || // player options
-                ((spotifyAuthorized && selectedView === 'user') || (isGuest && nickname.length >= 3)) // user options
-            )
-        ) {
-        
-            const tabs = [];
-            if (selectedView === 'player') tabs.push({ name: 'Player', value: 'player' });
-            if (anotherView === 'both' || selectedView === 'user') tabs.push({ name: 'User', value: 'user' }, { name: 'Party', value: 'party' });
-            if (hostOption === 'local') tabs.push({ name: 'Host Settings', value: 'hostSettings' });
-            
-            setNavbarTabs(tabs);
-            setCurrentView(selectedView);
-
-            // if player create party session with selected options
-            if (selectedView === 'player') {
-                fetch('http://127.0.0.1:8080/api/party/create', {
-                    method: 'POST',
-                    credentials: 'include',
-                })
-                .then( () => setPartyId(user.spotifyId) )
-                .catch( err => console.error("Failed to create party session:", err) );
-            }
-        }
-
-    }, [acceptedCookies, selectedView, hostOption, anotherView, voteToSkipOption, specifiedPercentage, specifiedNumber, isGuest, nickname]);
-
-    const handleJoin = () => {
-        if (nickname.trim().length < 3) {
-            alert("Nick musi mieć co najmniej 3 znaki!");
+    
+    const handleParty = () => {
+        if (!acceptedCookies) {
+            alert("Musisz zaakceptować pliki cookie, aby korzystać z tej aplikacji.");
             return;
         }
-        localStorage.setItem('guestNickname', nickname);
-        loginAsGuest(nickname);
-    };
+
+        const tabs = [];
+        if (selectedView === 'player') tabs.push({ name: 'Player', value: 'player' });
+        if (anotherView === 'both' || selectedView === 'user') tabs.push({ name: 'User', value: 'user' }, { name: 'Party', value: 'party' });
+        if (hostOption === 'local') tabs.push({ name: 'Host Settings', value: 'hostSettings' });
+        setNavbarTabs(tabs);
+        
+        if (selectedView === 'player') {
+            if (anotherView === 'both') {
+                createPartySessionAndJoin();
+            } else {
+                createPartySession();
+            }
+        } else if (selectedView === 'user') {
+            localStorage.setItem('enteredPartyId', enteredPartyId);
+            
+            if (isGuest) {
+                loginAsGuest(nickname).then(() => {;
+                    joinPartySession(enteredPartyId);
+                });
+            } else {
+                joinPartySession(enteredPartyId);
+            }
+        }
+    }
+    const handleNicknameSubmit = () => {
+        if (nickname.trim().length < 3) {
+            alert("Nick musi mieć co najmniej 3 znaki.");
+            return;
+        }
+
+        localStorage.setItem('nickname', nickname);
+        setNicknameSubmitted(true);
+    }
 
     // cookie consent
     if (!acceptedCookies) {
@@ -251,6 +254,20 @@ const SelectView = ({ setCurrentView, setNavbarTabs }) => {
                 </div>
             );
         }
+
+        // if all options selected show create button
+        return (
+            <div className={styles.container}>
+                <div className={styles.inputCard}>
+                    <div className={styles.icon}>✅</div>
+                    <h2 className={styles.title}>Wszystko gotowe!</h2>
+                    <p className={styles.description}>Kliknij poniższy przycisk, aby stworzyć pokój i rozpocząć imprezę!</p>
+                    <button className={styles.primaryButton} onClick={handleParty}>
+                        Stwórz pokój
+                    </button>
+                </div>
+            </div>
+        );
     }
     
     // user view
@@ -275,7 +292,7 @@ const SelectView = ({ setCurrentView, setNavbarTabs }) => {
             );
         }
 
-        if (isGuest) {
+        if (isGuest && !nicknameSubmitted) {
             return (
                 <div className={styles.container}>
                     <div className={styles.inputCard}>
@@ -288,11 +305,11 @@ const SelectView = ({ setCurrentView, setNavbarTabs }) => {
                         <div className={styles.inputWrapper}>
                             <input
                                 type="text"
-                                className={styles.nicknameInput}
+                                className={styles.inputBox}
                                 placeholder="Wpisz swój nick..."
                                 value={nickname}
                                 onChange={(e) => setNickname(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleJoin()}
+                                onKeyDown={(e) => e.key === 'Enter' && handleNicknameSubmit()}
                                 maxLength={20}
                             />
                             <span className={styles.charCount}>{nickname.length}/20</span>
@@ -300,8 +317,40 @@ const SelectView = ({ setCurrentView, setNavbarTabs }) => {
 
                         <button 
                             className={styles.primaryButton} 
-                            onClick={handleJoin}
+                            onClick={handleNicknameSubmit}
                             disabled={nickname.trim().length < 3}
+                        >
+                            Dołącz do imprezy
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        if (spotifyAuthorized || nicknameSubmitted) {
+            return (
+                <div className={styles.container}>
+                    <div className={styles.inputCard}>
+                        <div className={styles.icon}></div>
+                        <h2 className={styles.title}>Wprowadź kod pokoju</h2>
+                        <p className={styles.description}>
+                            Wpisz kod z odtwarzacza poniżej, aby dołączyć do imprezy.
+                        </p>
+                        <div className={styles.inputWrapper}>
+                            <input
+                                type="text"
+                                className={styles.inputBox}
+                                placeholder="Wpisz kod pokoju..."
+                                value={enteredPartyId}
+                                onChange={(e) => setEnteredPartyId(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleParty()}
+                            />
+                        </div>
+
+                        <button 
+                            className={styles.primaryButton} 
+                            onClick={handleParty}
+                            disabled={enteredPartyId.trim().length === 0}
                         >
                             Dołącz do imprezy
                         </button>

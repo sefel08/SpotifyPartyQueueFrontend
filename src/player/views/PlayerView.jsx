@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styles from './PlayerView.module.css';
 import { useAuth } from '../../global/contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
+import { useParty } from '../../global/contexts/PartyContext';
 import image from '../../assets/Wlaz_Normal.png';
 import Navbar from '../../global/components/Navbar/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PlayerView = () => {
-  const { spotifyAuthorized, login, user, loadingAuth } = useAuth();
-  const { partyId, joinPassword, currentTrack, progressMs, progressPercent } = usePlayer();
+  const { loadingAuth } = useAuth();
+  const { currentTrack, progressMs, progressPercent } = usePlayer();
+  const { partyId, joinPassword } = useParty();
 
   const [joinPanelVisible, setJoinPanelVisible] = useState(true);
 

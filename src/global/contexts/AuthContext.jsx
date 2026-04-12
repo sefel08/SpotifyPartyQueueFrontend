@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         window.location.href = 'http://127.0.0.1:8080/oauth2/authorization/spotify';
     };
     const loginAsGuest = (displayName) => {
-        fetch('http://127.0.0.1:8080/api/user/login-as-guest', {
+        return fetch('http://127.0.0.1:8080/api/user/login-as-guest', {
             method: 'POST',
             credentials: 'include',
             headers: {

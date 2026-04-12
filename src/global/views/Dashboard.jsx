@@ -6,6 +6,7 @@ import PlayerView from '../../player/views/PlayerView';
 import UserView from '../../user/views/UserView';
 import { UserProvider } from '../../user/contexts/UserContext';
 import { PlayerProvider } from '../../player/contexts/PlayerContext';
+import { PartyProvider } from '../contexts/PartyContext';
 import Navbar from '../components/Navbar/Navbar';
 
 const Dashboard = () => {
@@ -38,24 +39,22 @@ const Dashboard = () => {
   return (
     <div className={styles.dashboard}>
 
-      {
-      !authorized ? (
-        <PlayerProvider>
-          <SelectView setCurrentView={handleViewChange} setNavbarTabs={handleTabsChange} />
-        </PlayerProvider>
-      ) : currentView === 'player' ? (
-        <PlayerProvider>
-          <PlayerView />
-        </PlayerProvider>
-      ) : currentView === 'user' ? (
-        <UserProvider>
-          <UserView goBackToViewSelection={resetView} />
-        </UserProvider>
-      ) : 
-        <PlayerProvider>
-          <SelectView setCurrentView={handleViewChange} setNavbarTabs={handleTabsChange} />
-        </PlayerProvider>
-      }
+      <PartyProvider changeView={handleViewChange}>
+        {
+        !authorized ? (
+            <SelectView setNavbarTabs={handleTabsChange} />
+        ) : currentView === 'player' ? (
+          <PlayerProvider>
+            <PlayerView />
+          </PlayerProvider>
+        ) : currentView === 'user' ? (
+          <UserProvider>
+            <UserView goBackToViewSelection={resetView} />
+          </UserProvider>
+        ) : 
+            <SelectView setNavbarTabs={handleTabsChange} />
+        }
+      </PartyProvider>
       
       {navbarTabs.length > 0 &&
         <Navbar tabs={navbarTabs} changeView={handleViewChange} />
