@@ -11,22 +11,27 @@ export const PartyProvider = ({ children, changeView }) => {
     const [joinPassword, setJoinPassword] = useState('1462');
 
     const createPartySessionAndJoin = () => {
-        createPartySession().then(() => {
-            joinPartySession(user.spotifyId);
+        createPartySession().then(partyId => {
+            joinPartySession(partyId);
         });
     };
     const createPartySession = () => {
-        return fetch('http://127.0.0.1:8080/api/party/create', {
+        return fetch('http://127.0.0.1:8080/api/party', {
             method: 'POST',
             credentials: 'include',
         })
-        .then( (res) => {
-            if (res.ok) {
-                setPartyId(user.spotifyId);
-                changeView('party');
-            }
+        .then((res) => {
+            if (!res.ok) throw new Error("Failed to create party session");
+            return res.text(); 
         })
-        .catch( err => console.error("Failed to create party session:", err) );
+        .then((partyId) => {
+            setPartyId(partyId);
+            changeView('party');
+            return partyId;
+        })
+        .catch((err) => {
+            console.error("Failed to create party session:", err);
+        });
     };
     const joinPartySession = (partyId) => {
         fetch(`http://127.0.0.1:8080/api/party/join?partyId=${partyId}`, {
@@ -44,7 +49,7 @@ export const PartyProvider = ({ children, changeView }) => {
     const getPartyQueue = () => {
         return fetch(`http://127.0.0.1:8080/api/party/partyQueue`, {
             method: 'GET',
-            credentials: 'include',
+            credentials: 'include'
         }).then( (res) => {
             if (res.ok) return res.json();
             return [];
@@ -53,10 +58,21 @@ export const PartyProvider = ({ children, changeView }) => {
             return [];
         });
     };
-
+    const getPartyUsers = () => {
+        return fetch(`http://127.0.0.1:8080/api/party/users`, {
+            method: 'GET',
+            credentials: `include`
+        }).then( (res) => {
+            if (res.ok) return res.json();
+            return [];
+        }).catch( err => {
+            console.error("Failed to get party users:", err) 
+            return [];
+        });
+    }
 
     return (
-        <PartyContext.Provider value={{ partyId, createPartySession, joinPartySession, createPartySessionAndJoin, getPartyQueue }}>
+        <PartyContext.Provider value={{ partyId, createPartySession, joinPartySession, createPartySessionAndJoin, getPartyQueue, getPartyUsers }}>
             {children}
         </PartyContext.Provider>
     );

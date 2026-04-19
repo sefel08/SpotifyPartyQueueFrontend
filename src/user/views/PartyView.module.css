@@ -57,9 +57,18 @@
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 20px;
-
+}
+.addedTrackList {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 1vh;
+    gap: 1dvh;
+}
+.userGrid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1vh;
     gap: 1dvh;
 }

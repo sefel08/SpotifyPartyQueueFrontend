@@ -2,22 +2,24 @@ import React, { useEffect, useState } from "react";
 import { useParty } from "../../global/contexts/PartyContext";
 import styles from "./PartyView.module.css";
 import AddedTrack from "../components/AddedTrack/AddedTrack";
+import UserCard from "../components/UserCard/UserCard";
 
 const PartyView = () => {
 
-    const [currentSubView, setCurrentSubView] = useState('queue');
+    const { getPartyQueue, getPartyUsers } = useParty();
 
-    const { getPartyQueue } = useParty();
+    const [currentSubView, setCurrentSubView] = useState('queue');
+    
     const [partyQueue, setPartyQueue] = useState([]);
+    const [partyUsers, setPartyUsers] = useState([]);
 
     useEffect(() => {
-        getPartyQueue().then(data => {
-            if (data) {
-                setPartyQueue(data);
-            } else {
-                setPartyQueue([]);
-            }
-        });
+        Promise.all([getPartyQueue(), getPartyUsers()])
+            .then(([queueData, usersData]) => {
+                setPartyQueue(queueData);
+                setPartyUsers(usersData);
+                // setIsLoading(false);
+            });
     }, []);
 
 
@@ -32,9 +34,19 @@ const PartyView = () => {
 
             {/* Main Content */}
             <main className={styles.mainContent}>
-                {partyQueue.map( (item, index) => (
-                    <AddedTrack key={index} track={item.track} profile={item.profile} />
-                ))}
+                {currentSubView === 'queue' ? (
+                    <div className={styles.addedTrackList}>
+                        {partyQueue.map((item, index) => (
+                            <AddedTrack key={index} track={item.track} profile={item.profile} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className={styles.userGrid}>
+                        {partyUsers.map((user, index) => (
+                            <UserCard key={index} user={user} />
+                        ))}
+                    </div>
+                )}
             </main>
 
         </div>

@@ -1,3 +1,4 @@
+import { small } from 'framer-motion/client';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 export const AuthContext = createContext();
@@ -5,7 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [authorized, setAuth] = useState(false);
     const [spotifyAuthorized, setSpotifyAuth] = useState(false);
-    const [user, setUser] = useState({ spotifyId: '', displayName: '', imageUrl: '' });
+    const [user, setUser] = useState({ displayName: '', imageUrl: '', smallImageUrl: '' });
 
     const [loadingAuth, setLoadingAuth] = useState(true);
 
@@ -23,9 +24,9 @@ export const AuthProvider = ({ children }) => {
             if (data.isLoggedIn) {
                 setSpotifyAuth(data.isSpotifyAuthenticated);
                 setUser({
-                    spotifyId: data.spotifyId,
                     displayName: data.displayName,
-                    imageUrl: data.imageUrl
+                    imageUrl: data.imageUrl,
+                    smallImageUrl: data.imageUrlSmall
                 });
             }
             
