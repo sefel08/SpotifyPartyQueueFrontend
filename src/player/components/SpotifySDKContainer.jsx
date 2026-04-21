@@ -28,7 +28,16 @@ const SpotifySDKContainer = () => {
 
         newPlayer.addListener('ready', ({ device_id }) => {
             console.log('Gotowy do grania na ID:', device_id);
-            // Tutaj warto wysłać device_id na backend, żeby wiedział gdzie puszczać muzykę
+            
+            //test
+            fetch(`http://127.0.0.1:8080/api/player`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ deviceId: device_id })
+            });
         });
 
         newPlayer.connect();

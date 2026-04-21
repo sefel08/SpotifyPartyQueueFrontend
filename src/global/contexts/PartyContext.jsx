@@ -7,10 +7,31 @@ export const PartyContext = createContext();
 
 export const PartyProvider = ({ children, changeView }) => {
     
-    const { user } = useAuth();
+    const { user, loadingAuth } = useAuth();
 
     const [partyId, setPartyId] = useState('');
     const [joinPassword, setJoinPassword] = useState('1462');
+    const [isHost, setIsHost] = useState(false);
+
+    useEffect(() => {
+        if (loadingAuth) return;
+
+        // fetch party status for current user
+        fetch(`${API_BASE_URL}/api/party/status`, {
+            method: 'GET',
+            credentials: 'include'
+        }).then( (res) => {
+            if (res.ok) return res.json();
+        }).then( (data) => {
+            if (data.inParty) {
+                setPartyId(data.partyId);
+                setIsHost(data.isHost);
+            }
+        }).catch( err => {
+            console.error("Failed to fetch party status:", err);
+        });
+
+    }, [loadingAuth]);
 
     const createPartySessionAndJoin = () => {
         createPartySession().then(partyId => {
@@ -48,6 +69,7 @@ export const PartyProvider = ({ children, changeView }) => {
         })
         .catch( err => console.error("Failed to join party session:", err) );
     };
+
     const getPartyQueue = () => {
         return fetch(`${API_BASE_URL}/api/party/partyQueue`, {
             method: 'GET',

@@ -12,7 +12,7 @@ const PlayerView = () => {
   const { currentTrack, progressMs, progressPercent } = usePlayer();
   const { partyId, joinPassword } = useParty();
 
-  const [joinPanelVisible, setJoinPanelVisible] = useState(true);
+  const [joinPanelVisible, setJoinPanelVisible] = useState(false);
 
   const formatTime = (ms) => {
     const minutes = Math.floor(ms / 60000);
