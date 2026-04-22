@@ -19,10 +19,12 @@ export const PartyProvider = ({ children, changeView }) => {
         // fetch party status for current user
         fetch(`${API_BASE_URL}/api/party/status`, {
             method: 'GET',
-            credentials: 'include'
+            credentials: 'include',
+            redirect: 'manual'
         }).then( (res) => {
             if (res.ok) return res.json();
         }).then( (data) => {
+            if (!data) return;
             if (data.inParty) {
                 setPartyId(data.partyId);
                 setIsHost(data.isHost);
