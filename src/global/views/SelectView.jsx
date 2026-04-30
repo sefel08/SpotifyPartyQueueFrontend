@@ -26,7 +26,16 @@ const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
     const [nicknameSubmitted, setNicknameSubmitted] = useState(false);
     const [enteredPartyId, setEnteredPartyId] = useState('');
 
-    
+    // get search params to check if user is joining a party through invite link
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const invitePartyId = params.get('partyId');
+        if (invitePartyId) {
+            setSelectedView('user');
+            setEnteredPartyId(invitePartyId);
+        }
+    }, []);
+
     const handleParty = () => {
         if (!acceptedCookies) {
             alert("Musisz zaakceptować pliki cookie, aby korzystać z tej aplikacji.");
@@ -69,6 +78,11 @@ const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
 
         localStorage.setItem('nickname', nickname);
         setNicknameSubmitted(true);
+        
+        // If user came from invite link, automatically join the party after submitting nickname
+        if (enteredPartyId) {
+            handleParty();
+        }
     }
 
     // cookie consent
