@@ -15,6 +15,8 @@ export const PartyProvider = ({ children }) => {
     const [joinPassword, setJoinPassword] = useState('1462');
     const [isHost, setIsHost] = useState(false);
 
+    const [votedToSkip, setVotedToSkip] = useState(false);
+
     useEffect(() => {
         if (loadingAuth) return;
 
@@ -38,15 +40,19 @@ export const PartyProvider = ({ children }) => {
 
     }, [loadingAuth]);
 
-    const createPartySessionAndJoin = () => {
-        createPartySession().then(partyId => {
+    const createPartySessionAndJoin = (partySettings) => {
+        createPartySession(partySettings).then(partyId => {
             joinPartySession(partyId);
         });
     };
-    const createPartySession = () => {
+    const createPartySession = (partySettings) => {
         return fetch(`${API_BASE_URL}/api/party`, {
             method: 'POST',
             credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(partySettings)
         })
         .then((res) => {
             if (!res.ok) throw new Error("Failed to create party session");
@@ -97,9 +103,22 @@ export const PartyProvider = ({ children }) => {
             return [];
         });
     }
+    const voteToSkip = () => {
+        fetch(`${API_BASE_URL}/api/party/skip`, {
+            method: 'POST',
+            credentials: 'include'
+        }).then( (res) => {
+            if (!res.ok) throw new Error("Failed to vote to skip");
+            return res.json();
+        }).then( (data) => {
+            setVotedToSkip(data);
+        }).catch( err => {
+            console.error("Failed to vote to skip, error occurred:", err);
+        });
+    };
 
     return (
-        <PartyContext.Provider value={{ loadingParty, partyId, createPartySession, joinPartySession, createPartySessionAndJoin, getPartyQueue, getPartyUsers }}>
+        <PartyContext.Provider value={{ loadingParty, partyId, joinPartySession, createPartySessionAndJoin, getPartyQueue, getPartyUsers, voteToSkip, votedToSkip }}>
             {children}
         </PartyContext.Provider>
     );

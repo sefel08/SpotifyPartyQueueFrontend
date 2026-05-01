@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../../global/contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
+import { useParty } from '../../global/contexts/PartyContext';
 
 import Sidebar from '../components/Sidebar/Sidebar';
 import MainBox from '../components/Mainbox/MainBox';
@@ -12,7 +13,8 @@ const UserView = ({ goBackToViewSelection }) => {
     
     const { user, authorized, login } = useAuth();
     const { queue, refreshUserQueue } = useUser();
-    
+    const { voteToSkip, votedToSkip } = useParty();
+
     const [currentSubView, setCurrentSubView] = useState('home');
     const [lastView, setLastView] = useState('home');
     const handleViewChange = (view) => {
@@ -36,6 +38,8 @@ const UserView = ({ goBackToViewSelection }) => {
                 <button className={`${styles.headerButton} ${currentSubView === 'home' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('home')}>Home</button>
                 <button className={`${styles.headerButton} ${currentSubView === 'library' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('library')}>Biblioteka</button>
                 <button className={`${styles.headerButton} ${currentSubView === 'search' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('search')}>Search</button>
+                //only for tests
+                <button className={`${styles.headerButton} ${votedToSkip ? styles.activeHeaderButton : ''}`} onClick={voteToSkip}>Skip</button>
             </header>
 
             {/* Main Content */}

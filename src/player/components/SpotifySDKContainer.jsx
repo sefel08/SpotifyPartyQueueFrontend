@@ -12,6 +12,7 @@ const SpotifySDKContainer = () => {
     const { setProgressMs, setIsPlaying } = usePlayerPlaybackActions();
 
     const playerInstance = useRef(null);
+    const isPlayerReady = useRef(false);
     const currentDeviceId = useRef(null);
     const isFetchingNext = useRef(false);
     const lastTrackId = useRef(null);
@@ -36,7 +37,10 @@ const SpotifySDKContainer = () => {
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ deviceId: device_id })
-            }).then(() => handleSongEndedOnBackend());
+            }).then(() => {
+                isPlayerReady.current = true;
+                handleSongEndedOnBackend();
+            });
         });
 
         p.addListener('player_state_changed', state => {
@@ -81,13 +85,16 @@ const SpotifySDKContainer = () => {
     const handleCleanup = () => {
         if (document.visibilityState === 'hidden') {
             if (!currentDeviceId.current) return;
-            fetch(`${API_BASE_URL}/api/player/cleanup${`?deviceId=${currentDeviceId.current}`}`, {
+            console.log("Cleaning up player on backend...");
+            fetch(`${API_BASE_URL}/api/player/cleanup`, {
                 method: 'POST',
+                credentials: 'include',
                 keepalive: true,
             });
         }
     };
     const handleSongEndedOnBackend = async () => {
+        if (!isPlayerReady.current) return;
         console.log("Requesting next track from backend...");
         fetch(`${API_BASE_URL}/api/player/playNext`, {
             method: 'POST',

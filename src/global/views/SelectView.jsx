@@ -51,11 +51,12 @@ const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
         setIsPlayer(selectedView === 'player');
 
         if (selectedView === 'player') {
-            if (anotherView === 'both') {
-                createPartySessionAndJoin();
-            } else {
-                createPartySession();
-            }
+            const partySettings = {
+                voteToSkip: !!voteToSkipOption,
+                percentVoting: voteToSkipOption === 'specifiedPercentage',
+                voteThreshold: voteToSkipOption === 'specifiedPercentage' ? specifiedPercentage / 100 : voteToSkipOption === 'specifiedNumber' ? specifiedNumber : 0,
+            };
+            createPartySessionAndJoin(partySettings);
         } else if (selectedView === 'user') {
             localStorage.setItem('enteredPartyId', enteredPartyId);
             
