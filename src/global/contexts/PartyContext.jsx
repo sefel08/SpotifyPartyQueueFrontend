@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
+import { Client } from '@stomp/stompjs';
+import { partyStore } from '../stores/partyStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -19,8 +21,53 @@ export const PartyProvider = ({ children }) => {
 
     useEffect(() => {
         if (loadingAuth) return;
+        updateStatus();
+    }, [loadingAuth]);
 
-        // fetch party status for current user
+    useEffect(() => {
+        if (!partyId) return;
+
+        const client = new Client({
+            brokerURL: 'ws://127.0.0.1:8080/ws-party',
+            credentials: 'include',
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+        });
+
+        client.onConnect = () => {
+            console.log('Connected to Party WebSocket');
+
+            client.subscribe(`/party/${partyId}`, (message) => {
+                const event = JSON.parse(message.body);
+                
+                switch (event) {
+                    case 'PARTY_QUEUE_CHANGED':
+                        partyStore.notify('partyQueue');
+                        break;
+                    case 'PARTY_USERS_CHANGED':
+                        partyStore.notify('partyUsers');
+                        break;
+                }
+            });
+        };
+
+        client.onStompError = (frame) => {
+            console.error('Broker reported error: ' + frame.headers['message']);
+        };
+
+        client.activate();
+
+        return () => {
+            if (client.active) {
+                client.deactivate();
+                console.log('Disconnected from Party WebSocket');
+            }
+        };
+
+    }, [partyId]);
+
+    const updateStatus = () => {
         fetch(`${API_BASE_URL}/api/party/status`, {
             method: 'GET',
             credentials: 'include',
@@ -37,8 +84,7 @@ export const PartyProvider = ({ children }) => {
         ).catch( err => {
             console.error("Failed to fetch party status:", err);
         });
-
-    }, [loadingAuth]);
+    };
 
     const createPartySessionAndJoin = (partySettings) => {
         createPartySession(partySettings).then(partyId => {
@@ -59,7 +105,6 @@ export const PartyProvider = ({ children }) => {
             return res.text(); 
         })
         .then((partyId) => {
-            setPartyId(partyId);
             return partyId;
         })
         .catch((err) => {
@@ -72,9 +117,9 @@ export const PartyProvider = ({ children }) => {
             credentials: 'include',
         })
         .then( (res) => {
-            if (res.ok) {
-                setPartyId(partyId);
-            }
+            if (!res.ok) throw new Error("Failed to join party session");
+        }).then( () => {
+            updateStatus();
         })
         .catch( err => console.error("Failed to join party session:", err) );
     };
@@ -111,14 +156,29 @@ export const PartyProvider = ({ children }) => {
             if (!res.ok) throw new Error("Failed to vote to skip");
             return res.json();
         }).then( (data) => {
-            setVotedToSkip(data);
+            if (data === true)
+                setVotedToSkip(true);
         }).catch( err => {
             console.error("Failed to vote to skip, error occurred:", err);
         });
     };
+    const cancelSkipVote = () => {
+        fetch(`${API_BASE_URL}/api/party/skip`, {
+            method: 'DELETE',
+            credentials: 'include'
+        }).then( (res) => {
+            if (!res.ok) throw new Error("Failed to cancel skip vote");
+            return res.json();
+        }).then((data) => {
+            if (data === true)
+                setVotedToSkip(false);
+        }).catch( err => {
+            console.error("Failed to cancel skip vote, error occurred:", err);
+        });
+    };
 
     return (
-        <PartyContext.Provider value={{ loadingParty, partyId, joinPartySession, createPartySessionAndJoin, getPartyQueue, getPartyUsers, voteToSkip, votedToSkip }}>
+        <PartyContext.Provider value={{ loadingParty, partyId, joinPartySession, createPartySessionAndJoin, getPartyQueue, getPartyUsers, voteToSkip, cancelSkipVote, votedToSkip }}>
             {children}
         </PartyContext.Provider>
     );

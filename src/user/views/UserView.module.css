@@ -74,8 +74,6 @@
     flex: 1;
     background-color: var(--spotify-black);
     color: var(--spotify-white);
-    padding: 0 2vh;
-    padding: 0 2dvh;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 20px;
@@ -89,13 +87,14 @@
     transform: translateX(-50%);
     z-index: 1000;
 
-    padding: 1.5vh 4vw;
-    padding: 1.5dvh 4vw;
+    padding: 0 5vw;
+    padding: 0 5dvw;
+    height: 3rem;
     max-width: 300px;
 
     background-color: var(--spotify-dark-gray);
     border: solid 1px rgba(255, 255, 255, 0.05);
-    border-radius: 1.2rem;
+    border-radius: 25px;
     color: white;
 
     font-weight: 600;
@@ -104,6 +103,34 @@
     justify-content: center;
     align-items: center;
 }
+.skipButton {
+    position: absolute;
+    bottom: 1.5vh;
+    bottom: 1.5dvh;
+    right: 1.5vh;
+    right: 1.5dvh;
+    z-index: 1000;
+
+    height: 3rem;
+    fill: var(--spotify-white);
+    background-color: var(--spotify-dark-gray);
+    border-radius: 50%;
+    border: solid 1px rgba(255, 255, 255, 0.05);
+}
+.skipButton.active {
+    background-color: var(--spotify-green);
+}
+.skipIcon {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin: 0.75rem;
+    pointer-events: none;
+}
+.skipButton.active .skipIcon {
+    fill: #000;
+}
+
+
 
 .queueContainer {
     position: fixed;

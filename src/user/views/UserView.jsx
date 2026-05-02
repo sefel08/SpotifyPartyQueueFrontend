@@ -9,14 +9,17 @@ import MainBox from '../components/Mainbox/MainBox';
 import Queuebar from '../../global/components/Queuebar/Queuebar';
 import styles from './UserView.module.css';
 
+import SkipIcon from '../../assets/skip_icon.svg?react';
+
 const UserView = ({ goBackToViewSelection }) => {
     
     const { user, authorized, login } = useAuth();
     const { queue, refreshUserQueue } = useUser();
-    const { voteToSkip, votedToSkip } = useParty();
+    const { voteToSkip, cancelSkipVote, votedToSkip } = useParty();
 
     const [currentSubView, setCurrentSubView] = useState('home');
     const [lastView, setLastView] = useState('home');
+    
     const handleViewChange = (view) => {
         setLastView(currentSubView);
         setCurrentSubView(view);
@@ -24,6 +27,14 @@ const UserView = ({ goBackToViewSelection }) => {
 
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const [isQueueOpen, setQueueOpen] = useState(false);
+
+    const handleSkip = () => {
+        if (!votedToSkip) {
+            voteToSkip();
+        } else {
+            cancelSkipVote();
+        }
+    };
 
     useEffect(() => {
         refreshUserQueue();
@@ -38,16 +49,17 @@ const UserView = ({ goBackToViewSelection }) => {
                 <button className={`${styles.headerButton} ${currentSubView === 'home' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('home')}>Home</button>
                 <button className={`${styles.headerButton} ${currentSubView === 'library' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('library')}>Biblioteka</button>
                 <button className={`${styles.headerButton} ${currentSubView === 'search' ? styles.activeHeaderButton : ''}`} onClick={() => setCurrentSubView('search')}>Search</button>
-                //only for tests
-                <button className={`${styles.headerButton} ${votedToSkip ? styles.activeHeaderButton : ''}`} onClick={voteToSkip}>Skip</button>
             </header>
 
             {/* Main Content */}
             <main className={styles.mainContent}>
                 <MainBox userName={user.name} currentView={currentSubView} lastView={lastView} setView={handleViewChange} />
                 <button className={styles.showQueueBtn} onClick={() => setQueueOpen(true)}>Pokaż kolejkę</button>
+                <button className={`${styles.skipButton} ${votedToSkip ? styles.active : ''}`} onClick={handleSkip}>
+                    <SkipIcon alt="Skip" className={styles.skipIcon} />
+                </button>
             </main>
-
+        
 
             {/* Hidden Items */}
 

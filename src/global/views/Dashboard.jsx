@@ -71,7 +71,7 @@ const Dashboard = () => {
           <PlayerPlaybackProvider isPlayer={isPlayer}>
 
             {
-              isPlayer && <SpotifySDKContainer />
+              isPlayer && <SpotifySDKContainer setClickedSomething={setClickedSomething} />
             }
 
             {currentView === 'player' ? (

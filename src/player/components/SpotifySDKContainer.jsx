@@ -5,7 +5,7 @@ import { usePlayerPlaybackActions } from '../contexts/PlayerPlaybackContext';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-const SpotifySDKContainer = () => {
+const SpotifySDKContainer = ({ setClickedSomething }) => {
     const { spotifyUserToken } = useAuth();
     
     const { setCurrentTrack } = usePlayer();
@@ -20,10 +20,15 @@ const SpotifySDKContainer = () => {
     const initPlayer = () => {
         console.log("Spotify player initializing...");
 
+        if (playerInstance.current) {
+            playerInstance.current.disconnect();
+            playerInstance.current = null;
+        }
+
         playerInstance.current = new window.Spotify.Player({
             name: 'Party Player for Spotify',
             getOAuthToken: cb => { cb(spotifyUserToken); },
-            volume: 0.5
+            volume: 0.2
         });
 
         const p = playerInstance.current;
@@ -39,7 +44,7 @@ const SpotifySDKContainer = () => {
                 body: JSON.stringify({ deviceId: device_id })
             }).then(() => {
                 isPlayerReady.current = true;
-                handleSongEndedOnBackend();
+                setTimeout(handleSongEndedOnBackend, 500);
             });
         });
 
@@ -83,14 +88,22 @@ const SpotifySDKContainer = () => {
         p.connect();
     };
     const handleCleanup = () => {
-        if (document.visibilityState === 'hidden') {
-            if (!currentDeviceId.current) return;
-            console.log("Cleaning up player on backend...");
-            fetch(`${API_BASE_URL}/api/player/cleanup`, {
-                method: 'POST',
-                credentials: 'include',
-                keepalive: true,
-            });
+        if (!currentDeviceId.current) return;
+        console.log("Non-desktop environment hidden - cleaning up player...");
+        isPlayerReady.current = false;
+        fetch(`${API_BASE_URL}/api/player/cleanup`, {
+            method: 'POST',
+            credentials: 'include',
+            keepalive: true,
+        });
+    };
+    const handleVisibilityChange = () => {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (document.visibilityState === 'hidden' && isMobile) {
+            handleCleanup();
+            playerInstance.current?.disconnect();
+            setClickedSomething(false);
         }
     };
     const handleSongEndedOnBackend = async () => {
@@ -127,10 +140,13 @@ const SpotifySDKContainer = () => {
             }
         }
 
-        window.addEventListener('visibilitychange', handleCleanup);
+        window.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleCleanup);
 
         return () => {
-            document.removeEventListener('visibilitychange', handleCleanup);
+            window.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('beforeunload', handleCleanup);
+            
             if (playerInstance.current) {
                 playerInstance.current.disconnect();
             }

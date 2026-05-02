@@ -3,13 +3,16 @@ import { useParty } from "../../global/contexts/PartyContext";
 import styles from "./PartyView.module.css";
 import AddedTrack from "../components/AddedTrack/AddedTrack";
 import UserCard from "../components/UserCard/UserCard";
+import { usePartySelector } from "../../global/components/usePartySelector";
 
 const PartyView = () => {
 
     const { getPartyQueue, getPartyUsers } = useParty();
 
     const [currentSubView, setCurrentSubView] = useState('queue');
-    
+
+    const queueVersion = usePartySelector(state => state.partyQueueVersion);
+    const usersVersion = usePartySelector(state => state.partyUsersVersion);
     const [partyQueue, setPartyQueue] = useState([]);
     const [partyUsers, setPartyUsers] = useState([]);
 
@@ -18,10 +21,14 @@ const PartyView = () => {
             .then(([queueData, usersData]) => {
                 setPartyQueue(queueData);
                 setPartyUsers(usersData);
-                // setIsLoading(false);
             });
     }, []);
-
+    useEffect(() => {
+        getPartyQueue().then(queueData => setPartyQueue(queueData));
+    }, [queueVersion]);
+    useEffect(() => {
+        getPartyUsers().then(usersData => setPartyUsers(usersData));
+    }, [usersVersion]);
 
     return (
         <div className={styles.container}>
