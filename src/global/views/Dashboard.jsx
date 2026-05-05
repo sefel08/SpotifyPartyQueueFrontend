@@ -12,52 +12,58 @@ import { PlayerPlaybackProvider } from '../../player/contexts/PlayerPlaybackCont
 import { PartyProvider } from '../contexts/PartyContext';
 import Navbar from '../components/Navbar/Navbar';
 import SpotifySDKContainer from '../../player/components/SpotifySDKContainer';
+import { a } from 'framer-motion/client';
 
 const Dashboard = () => {
   
-  const { authorized, loadingAuth } = useAuth();
+  const { authorized, loadingAuth, userRole } = useAuth();
   const { loadingParty, partyId } = useParty();
 
   const [clickedSomething, setClickedSomething] = useState(false);
 
-  const [isPlayer, setIsPlayer] = useState(() => localStorage.getItem('isPlayer') === 'true');
-  const [currentView, setCurrentView] = useState(() => localStorage.getItem('currentView') || null);
-  const [navbarTabs, setNavbarTabs] = useState(() => {
-    const savedTabs = localStorage.getItem('navbarTabs');
-    return savedTabs ? JSON.parse(savedTabs) : [];
-  });
+  const [currentView, setCurrentView] = useState(null);
+  const [viewResetTrigger, setViewResetTrigger] = useState(0);
+  const [mustRejoinParty, setMustRejoinParty] = useState(false);
+
+  // currentview status check
+  useEffect(() => {
+    if (loadingAuth) return;
+
+    const avaibleViews = [];
+    if (userRole.isPlayer) avaibleViews.push('player');
+    if (userRole.isUser) avaibleViews.push('user');
+    if (userRole.isHost) avaibleViews.push('host');
+
+    setCurrentView(avaibleViews[0] || null);
+    if (avaibleViews.length === 0) setMustRejoinParty(true);
+    else setMustRejoinParty(false);
+  }, [loadingAuth]);
 
   const resetView = () => {
     setCurrentView(null);
     localStorage.removeItem('currentView');
   }
-  const handleSetIsPlayer = (val) => {
-    //set that user clicked something because it is redirect from select view
-    setClickedSomething(true);
-    setIsPlayer(val);
-    localStorage.setItem('isPlayer', val);
-  };
   const handleViewChange = (view) => {
-    setCurrentView(view);
-    localStorage.setItem('currentView', view);
-  }
-  const handleTabsChange = (tabs) => {
-    localStorage.setItem('navbarTabs', JSON.stringify(tabs));
-    setNavbarTabs(tabs);
+    if (view === currentView) {
+      setViewResetTrigger(prev => prev + 1); // trigger reset if same view is selected
+    } else {
+      setCurrentView(view);
+      localStorage.setItem('currentView', view);
+    }
   }
 
   if (loadingAuth || loadingParty) {
     return <div className={styles.loading}>Ładowanie...</div>;
   }
 
-  if (!authorized || !partyId) {
-    return <SelectView setNavbarTabs={handleTabsChange} setIsPlayer={handleSetIsPlayer} setCurrentView={handleViewChange} />;
+  if ((!authorized || !partyId) || mustRejoinParty) {
+    return <SelectView />;
   }
 
   // Make sure user clicks something to disable auto-play block in browsers
-  if (!clickedSomething && isPlayer) {
+  if (userRole.isPlayer && !clickedSomething) {
     return (
-      <div style={{ width: '100%', height: '100%', fontSize: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setClickedSomething(true)}>
+      <div style={{ width: '100%', height: '100%', fontSize: '4rem', display: 'flex', alignItems: 'center', textAlign: 'center' }} onClick={() => setClickedSomething(true)}>
         Kliknij w ekran, aby uruchomić odtwarzacz Spotify
       </div>
     );
@@ -67,17 +73,17 @@ const Dashboard = () => {
     <div className={styles.dashboard}>
 
       <UserProvider>
-        <PlayerProvider isPlayer={isPlayer}>
-          <PlayerPlaybackProvider isPlayer={isPlayer}>
+        <PlayerProvider isPlayer={userRole.isPlayer}>
+          <PlayerPlaybackProvider isPlayer={userRole.isPlayer}>
 
             {
-              isPlayer && <SpotifySDKContainer setClickedSomething={setClickedSomething} />
+              userRole.isPlayer && <SpotifySDKContainer setClickedSomething={setClickedSomething} />
             }
 
             {currentView === 'player' ? (
               <PlayerView />
             ) : currentView === 'user' ? (
-              <UserView goBackToViewSelection={resetView} />
+              <UserView goBackToViewSelection={resetView} resetTrigger={viewResetTrigger} />
             ) : currentView === 'party' ? (
               <PartyView />
             ) : (
@@ -88,9 +94,7 @@ const Dashboard = () => {
         </PlayerProvider>
       </UserProvider>
       
-      {navbarTabs.length > 0 &&
-        <Navbar tabs={navbarTabs} changeView={handleViewChange} />
-      }
+      <Navbar changeView={handleViewChange} />
 
     </div>
   );

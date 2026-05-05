@@ -47,7 +47,7 @@ export const UserProvider = ({ children }) => {
         fetch(`${API_BASE_URL}/api/party/queue`, {
             credentials: 'include',
         })
-        .then(res => res.json())
+        .then((res) => { if(!res.ok) return []; return res.json(); })
         .then(data => {
             setQueue(data);
         })

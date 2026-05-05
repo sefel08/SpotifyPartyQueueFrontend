@@ -17,13 +17,6 @@ const PartyView = () => {
     const [partyUsers, setPartyUsers] = useState([]);
 
     useEffect(() => {
-        Promise.all([getPartyQueue(), getPartyUsers()])
-            .then(([queueData, usersData]) => {
-                setPartyQueue(queueData);
-                setPartyUsers(usersData);
-            });
-    }, []);
-    useEffect(() => {
         getPartyQueue().then(queueData => setPartyQueue(queueData));
     }, [queueVersion]);
     useEffect(() => {

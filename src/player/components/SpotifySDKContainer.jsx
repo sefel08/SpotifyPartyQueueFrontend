@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, use } from 'react';
 import { useAuth } from '../../global/contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
 import { usePlayerPlaybackActions } from '../contexts/PlayerPlaybackContext';
@@ -6,8 +6,9 @@ import { usePlayerPlaybackActions } from '../contexts/PlayerPlaybackContext';
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const SpotifySDKContainer = ({ setClickedSomething }) => {
-    const { spotifyUserToken } = useAuth();
-    
+    const { spotifyUserToken, refreshSpotifyToken } = useAuth();
+    const tokenRef = useRef(spotifyUserToken);
+
     const { setCurrentTrack } = usePlayer();
     const { setProgressMs, setIsPlaying } = usePlayerPlaybackActions();
 
@@ -17,22 +18,29 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
     const isFetchingNext = useRef(false);
     const lastTrackId = useRef(null);
 
+    const createPlayer = () => {
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            initPlayer();
+        };
+
+        if (!document.getElementById('spotify-sdk')) {
+            const script = document.createElement("script");
+            script.id = 'spotify-sdk';
+            script.src = "https://sdk.scdn.co/spotify-player.js";
+            script.async = true;
+            document.body.appendChild(script);
+        }
+    };
     const initPlayer = () => {
         console.log("Spotify player initializing...");
 
-        if (playerInstance.current) {
-            playerInstance.current.disconnect();
-            playerInstance.current = null;
-        }
-
         playerInstance.current = new window.Spotify.Player({
             name: 'Party Player for Spotify',
-            getOAuthToken: cb => { cb(spotifyUserToken); },
+            getOAuthToken: cb => { cb(tokenRef.current); },
             volume: 0.2
         });
 
         const p = playerInstance.current;
-
         p.addListener('ready', ({ device_id }) => {
             console.log('Player ready with ID:', device_id);
             currentDeviceId.current = device_id;
@@ -47,7 +55,6 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
                 setTimeout(handleSongEndedOnBackend, 500);
             });
         });
-
         p.addListener('player_state_changed', state => {
             if (!state) return;
 
@@ -86,6 +93,9 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         });
 
         p.connect();
+
+        window.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleCleanup);
     };
     const handleCleanup = () => {
         if (!currentDeviceId.current) return;
@@ -99,6 +109,8 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
     };
     // TODO fix this
     const handleVisibilityChange = () => {
+        return;
+        
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
         if (document.visibilityState === 'hidden' && isMobile) {
@@ -113,8 +125,13 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         fetch(`${API_BASE_URL}/api/player/playNext`, {
             method: 'POST',
             credentials: 'include',
-        }).then(res => res.json())
-        .then(data => {
+        }).then( (res) => {
+            if (!res.ok) {
+                throw new Error(`Server responded with status ${res.status} on playNext request`);
+                return null;
+            }
+            return res.json()
+        }).then(data => {
             if (!data.played)   
                 setCurrentTrack(null);
         }).catch(err => {
@@ -122,27 +139,36 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         });
     };
 
+    // remap spotify token to ref to avoid issues with stale closures in player event handlers
+    useEffect(() => {
+        tokenRef.current = spotifyUserToken;
+    }, [spotifyUserToken]);
+
+    // refresh token
+    useEffect(() => {
+        if (!spotifyUserToken) {
+            refreshSpotifyToken();
+            return;
+        }
+
+        const REFRESH_INTERVAL = 45 * 60 * 1000; // 45 minutes
+        const refreshTimer = setTimeout(() => {
+            refreshSpotifyToken();
+        }, REFRESH_INTERVAL);
+
+        return () => clearTimeout(refreshTimer);
+    }, [spotifyUserToken]);
+
+    // initialize player except when token is only being refreshed
     useEffect(() => {
         if (!spotifyUserToken) return;
+        if (playerInstance.current) return;
 
         if (window.Spotify) {
             initPlayer();
         } else {
-            window.onSpotifyWebPlaybackSDKReady = () => {
-                initPlayer();
-            };
-
-            if (!document.getElementById('spotify-sdk')) {
-                const script = document.createElement("script");
-                script.id = 'spotify-sdk';
-                script.src = "https://sdk.scdn.co/spotify-player.js";
-                script.async = true;
-                document.body.appendChild(script);
-            }
+            createPlayer();
         }
-
-        window.addEventListener('visibilitychange', handleVisibilityChange);
-        window.addEventListener('beforeunload', handleCleanup);
 
         return () => {
             window.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -150,9 +176,11 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
             
             if (playerInstance.current) {
                 playerInstance.current.disconnect();
+                playerInstance.current = null;
             }
         };
-    }, [spotifyUserToken]);
+    }, [spotifyUserToken !== null]);
+
 
     return null;
 };

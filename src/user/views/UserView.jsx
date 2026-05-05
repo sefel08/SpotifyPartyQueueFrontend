@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 
 import { useAuth } from '../../global/contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
@@ -12,12 +12,12 @@ import styles from './UserView.module.css';
 import SkipIcon from '../../assets/skip_icon.svg?react';
 import { usePartySelector } from '../../global/components/usePartySelector';
 
-const UserView = ({ goBackToViewSelection }) => {
+const UserView = ({ goBackToViewSelection, resetTrigger }) => {
     
     const { user, authorized, login } = useAuth();
     const { queue, refreshUserQueue } = useUser();
     
-    const { votedToSkip, isVotePending, handleSkip } = useParty();
+    const { votedToSkip, handleSkip } = useParty();
     const skipVotes = usePartySelector(state => state.skipVotes);
 
     const [currentSubView, setCurrentSubView] = useState('home');
@@ -34,6 +34,9 @@ const UserView = ({ goBackToViewSelection }) => {
     useEffect(() => {
         refreshUserQueue();
     }, []);
+    useEffect(() => {
+        setCurrentSubView('home');
+    }, [resetTrigger]);
 
     return (
         <div className={styles.container}>
@@ -50,7 +53,7 @@ const UserView = ({ goBackToViewSelection }) => {
             <main className={styles.mainContent}>
                 <MainBox userName={user.name} currentView={currentSubView} lastView={lastView} setView={handleViewChange} />
                 <button className={styles.showQueueBtn} onClick={() => setQueueOpen(true)}>Pokaż kolejkę</button>
-                <button className={`${styles.skipButton} ${votedToSkip ? styles.active : ''}`} onClick={handleSkip} disabled={isVotePending}>
+                <button className={`${styles.skipButton} ${votedToSkip ? styles.active : ''}`} onClick={handleSkip}>
                     <span className={`${styles.skipCount} ${votedToSkip ? styles.active : ''}`}>
                         {skipVotes !== 0 ? skipVotes : ''}
                     </span>
@@ -72,7 +75,7 @@ const UserView = ({ goBackToViewSelection }) => {
                 <Queuebar queue={queue} />
             </aside>
 
-            {/* gray box behind */}
+            {/* gray overlay behind */}
             <div 
                 className={`${styles.overlay} ${(isSidebarOpen || isQueueOpen) ? styles.active : ''}`} 
                 onClick={() => { setSidebarOpen(false); setQueueOpen(false); }}

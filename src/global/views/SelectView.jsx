@@ -4,12 +4,13 @@ import Slider from '../components/Slider/Slider';
 import { useAuth } from '../contexts/AuthContext';
 import { useParty } from '../contexts/PartyContext';
 
-const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
+const SelectView = () => {
 
     const { spotifyAuthorized, login, loginAsGuest } = useAuth();
-    const { createPartySession, joinPartySession, createPartySessionAndJoin, partyId } = useParty();
+    const { createPartySession, joinPartySession, createPartySessionAndJoin } = useParty();
 
     // global states
+    const [processing, setProcessing] = useState(false);
     const [acceptedCookies, setAcceptedCookies] = useState(() => localStorage.getItem('acceptedCookies') === 'true' );
     const [selectedView, setSelectedView] = useState(null);
     
@@ -25,6 +26,7 @@ const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
     const [nickname, setNickname] = useState(() => localStorage.getItem('nickname') || '' );
     const [nicknameSubmitted, setNicknameSubmitted] = useState(false);
     const [enteredPartyId, setEnteredPartyId] = useState('');
+    const [autoJoinTry, setAutoJoinTry] = useState(0); // 0 dont try 1 try, 2 tried
 
     // get search params to check if user is joining a party through invite link
     useEffect(() => {
@@ -33,43 +35,52 @@ const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
         if (invitePartyId) {
             setSelectedView('user');
             setEnteredPartyId(invitePartyId);
+            setAutoJoinTry(1);
         }
+        setIsGuest(false);
+        setNicknameSubmitted(false);
     }, []);
+    //auto join
+    useEffect(() => {
+        if ((selectedView === 'user' && enteredPartyId && (spotifyAuthorized || (isGuest && nicknameSubmitted))) && autoJoinTry === 1) {
+            setAutoJoinTry(2);
+            handleParty();
+        }
+    }, [selectedView, enteredPartyId]);
 
-    const handleParty = () => {
+    const handleParty = async () => {
         if (!acceptedCookies) {
             alert("Musisz zaakceptować pliki cookie, aby korzystać z tej aplikacji.");
             return;
         }
 
-        const tabs = [];
-        if (selectedView === 'player') tabs.push({ name: 'Player', value: 'player' });
-        if (anotherView === 'both' || selectedView === 'user') tabs.push({ name: 'User', value: 'user' }, { name: 'Party', value: 'party' });
-        if (hostOption === 'local') tabs.push({ name: 'Host Settings', value: 'hostSettings' });
-        setNavbarTabs(tabs);
-        
-        setIsPlayer(selectedView === 'player');
+        if (processing) return;
+        setProcessing(true);
 
+        const isUser = selectedView === 'user' || (selectedView === 'player' && anotherView === 'both');
+        const isPlayer = selectedView === 'player';
+        const isHost = false;
+        
         if (selectedView === 'player') {
+
             const partySettings = {
                 voteToSkip: !!voteToSkipOption,
                 percentVoting: voteToSkipOption === 'specifiedPercentage',
                 voteThreshold: voteToSkipOption === 'specifiedPercentage' ? specifiedPercentage / 100 : voteToSkipOption === 'specifiedNumber' ? specifiedNumber : 0,
             };
-            createPartySessionAndJoin(partySettings);
+            await createPartySessionAndJoin(partySettings, isUser, isPlayer, isHost);
+        
         } else if (selectedView === 'user') {
+
             localStorage.setItem('enteredPartyId', enteredPartyId);
-            
             if (isGuest) {
-                loginAsGuest(nickname).then(() => {;
-                    joinPartySession(enteredPartyId);
-                });
-            } else {
-                joinPartySession(enteredPartyId);
+                await loginAsGuest(nickname);
             }
+            await joinPartySession(enteredPartyId, isUser, isPlayer, isHost);
+
         }
 
-        setCurrentView(selectedView);
+        setProcessing(false);
     }
     const handleNicknameSubmit = () => {
         if (nickname.trim().length < 3) {
@@ -279,7 +290,7 @@ const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
                     <div className={styles.icon}>✅</div>
                     <h2 className={styles.title}>Wszystko gotowe!</h2>
                     <p className={styles.description}>Kliknij poniższy przycisk, aby stworzyć pokój i rozpocząć imprezę!</p>
-                    <button className={styles.primaryButton} onClick={handleParty}>
+                    <button className={styles.primaryButton} onClick={handleParty} disabled={processing}>
                         Stwórz pokój
                     </button>
                 </div>
@@ -367,7 +378,7 @@ const SelectView = ({ setNavbarTabs, setIsPlayer, setCurrentView }) => {
                         <button 
                             className={styles.primaryButton} 
                             onClick={handleParty}
-                            disabled={enteredPartyId.trim().length === 0}
+                            disabled={enteredPartyId.trim().length === 0 || processing}
                         >
                             Dołącz do imprezy
                         </button>

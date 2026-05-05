@@ -14,6 +14,8 @@ export const PlayerPlaybackProvider = ({ children, isPlayer }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [progressMs, setProgressMs] = useState(0);
 
+    const [joinPassword, setJoinPassword] = useState('1462');
+
     useEffect(() => {
         if (!isPlayer || !isPlaying) return;
 
@@ -36,7 +38,7 @@ export const PlayerPlaybackProvider = ({ children, isPlayer }) => {
 
     return (
         <PlayerPlaybackActionsContext.Provider value={actions}>
-            <PlayerPlaybackDataContext.Provider value={{ progressMs, progressPercent, isPlaying }}>
+            <PlayerPlaybackDataContext.Provider value={{ progressMs, progressPercent, isPlaying, joinPassword }}>
                     {children}
             </PlayerPlaybackDataContext.Provider>
         </PlayerPlaybackActionsContext.Provider>

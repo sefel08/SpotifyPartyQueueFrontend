@@ -12,8 +12,8 @@ import album_placeholder from '../../assets/music_album_icon.svg';
 const PlayerView = () => {
   const { loadingAuth } = useAuth();
   const { currentTrack } = usePlayer();
-  const { progressMs, progressPercent } = usePlayerPlaybackData();
-  const { partyId, joinPassword } = useParty();
+  const { progressMs, progressPercent, joinPassword } = usePlayerPlaybackData();
+  const { partyId } = useParty();
 
   const [joinPanelVisible, setJoinPanelVisible] = useState(false);
 

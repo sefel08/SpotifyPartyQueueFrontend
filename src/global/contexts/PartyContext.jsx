@@ -9,14 +9,12 @@ export const PartyContext = createContext();
 
 export const PartyProvider = ({ children }) => {
     
-    const { user, loadingAuth } = useAuth();
+    const { user, loadingAuth, refreshStatus } = useAuth();
 
     const [loadingParty, setLoadingParty] = useState(true);
 
     const [partyId, setPartyId] = useState('');
-    const [joinPassword, setJoinPassword] = useState('1462');
-    const [isHost, setIsHost] = useState(false);
-
+    
     const [votedToSkip, setVotedToSkip] = useState(false);
     const [isVotePending, setIsVotePending] = useState(false);
 
@@ -62,12 +60,21 @@ export const PartyProvider = ({ children }) => {
                         break;
                 }
             });
-        };
 
+            client.subscribe('/user/messages', (message) => {
+                const messageData = JSON.parse(message.body);
+
+                switch (messageData.type) {
+                    case 'REFRESH_STATUS':
+                        console.log('Received REFRESH_STATUS message, refreshing auth status');
+                        refreshStatus();
+                        break;
+                }
+            });
+        };
         client.onStompError = (frame) => {
             console.error('Broker reported error: ' + frame.headers['message']);
         };
-
         client.activate();
 
         return () => {
@@ -90,16 +97,17 @@ export const PartyProvider = ({ children }) => {
             if (!data) return;
             if (data.inParty) {
                 setPartyId(data.partyId);
-                setIsHost(data.isHost);
+            } else {
+                setPartyId('');
             }
         }).catch( err => {
             console.error("Failed to fetch party status:", err);
         }).finally(() => setLoadingParty(false));
     };
 
-    const createPartySessionAndJoin = (partySettings) => {
+    const createPartySessionAndJoin = (partySettings, asUser, asPlayer, asHost) => {
         createPartySession(partySettings).then(partyId => {
-            joinPartySession(partyId);
+            joinPartySession(partyId, asUser, asPlayer, asHost);
         });
     };
     const createPartySession = (partySettings) => {
@@ -122,15 +130,27 @@ export const PartyProvider = ({ children }) => {
             console.error("Failed to create party session:", err);
         });
     };
-    const joinPartySession = (partyId) => {
+    const joinPartySession = (partyId, asUser, asPlayer, asHost) => {
         fetch(`${API_BASE_URL}/api/party/join?partyId=${partyId}`, {
             method: 'POST',
             credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ asParticipant: !!asUser, asPlayer: !!asPlayer, asHost: !!asHost })
         })
         .then( (res) => {
             if (!res.ok) throw new Error("Failed to join party session");
+            return res.json();
+        }).then( (data) => {
+            if (data.success) {
+                return;
+            } else {
+                alert(data.message);
+            }
         }).then( () => {
             updateStatus();
+            refreshStatus();
         })
         .catch( err => console.error("Failed to join party session:", err) );
     };
@@ -219,7 +239,7 @@ export const PartyProvider = ({ children }) => {
     };
 
     return (
-        <PartyContext.Provider value={{ loadingParty, partyId, joinPartySession, createPartySessionAndJoin, getPartyQueue, getPartyUsers, votedToSkip, isVotePending, handleSkip }}>
+        <PartyContext.Provider value={{ loadingParty, partyId, joinPartySession, createPartySessionAndJoin, getPartyQueue, getPartyUsers, votedToSkip, handleSkip }}>
             {children}
         </PartyContext.Provider>
     );
