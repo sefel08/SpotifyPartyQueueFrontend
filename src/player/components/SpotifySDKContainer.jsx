@@ -13,11 +13,15 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
     const { setProgressMs, setIsPlaying } = usePlayerPlaybackActions();
 
     const playerInstance = useRef(null);
-    const isPlayerReady = useRef(false);
+    const isPlayerReady = useRef(false); // player on backend is ready and can accept playNext requests
     const currentDeviceId = useRef(null);
-    const isFetchingNext = useRef(false);
+    
+    const isFetchingNext = useRef(false); // to prevent multiple playNext requests when song ends
+    
     const lastTrackId = useRef(null);
+    const cleanupMade = useRef(false);
 
+    // browser player methods
     const createPlayer = () => {
         window.onSpotifyWebPlaybackSDKReady = () => {
             initPlayer();
@@ -37,23 +41,15 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         playerInstance.current = new window.Spotify.Player({
             name: 'Party Player for Spotify',
             getOAuthToken: cb => { cb(tokenRef.current); },
-            volume: 0.2
+            volume: 0.25
         });
 
         const p = playerInstance.current;
+
         p.addListener('ready', ({ device_id }) => {
-            console.log('Player ready with ID:', device_id);
             currentDeviceId.current = device_id;
-            
-            fetch(`${API_BASE_URL}/api/player/setup`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ deviceId: device_id })
-            }).then(() => {
-                isPlayerReady.current = true;
-                setTimeout(handleSongEndedOnBackend, 500);
-            });
+            console.log('Spotify Player is ready with device ID:', device_id);
+            setupPlayer(device_id);
         });
         p.addListener('player_state_changed', state => {
             if (!state) return;
@@ -64,6 +60,7 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
             // update contexts
             setIsPlaying(!paused);
 
+            // if track changed, update track info in context and reset progress
             if (currentTrack.id !== lastTrackId.current) {
                 // update track info in context
                 setCurrentTrack({
@@ -74,13 +71,9 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
                 });
                 
                 lastTrackId.current = currentTrack.id;
-                
-                setTimeout(() => {
-                    isFetchingNext.current = false;
-                }, 3000);
-
                 return;
             }
+
             if (paused && position === 0 && duration > 0 && !isFetchingNext.current) {
                 console.log("Song ended");
                 isFetchingNext.current = true;
@@ -95,29 +88,54 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         p.connect();
 
         window.addEventListener('visibilitychange', handleVisibilityChange);
-        window.addEventListener('beforeunload', handleCleanup);
+        window.addEventListener('beforeunload', cleanupPlayer);
     };
-    const handleCleanup = () => {
-        if (!currentDeviceId.current) return;
-        console.log("Non-desktop environment hidden - cleaning up player...");
+    const clearPlayer = () => {
+        if (playerInstance.current) {
+            playerInstance.current.disconnect();
+            playerInstance.current = null;
+        }
+    };
+
+    // backend player methods
+    const setupPlayer = (deviceId) => {
+        fetch(`${API_BASE_URL}/api/player/setup`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ deviceId })
+            }).then(res => {
+                if (!res.ok) {
+                    throw new Error(`Player setup failed with status ${res.status}`);
+                }
+            }).then(() => {
+                isPlayerReady.current = true;
+                cleanupMade.current = false; // reset cleanup flag on new setup
+                setTimeout(handleSongEndedOnBackend, 1000);
+            }).catch(err => {
+                console.error("Error during player setup:", err);
+            });
+    };
+    const cleanupPlayer = () => {
+        if (cleanupMade.current) return; // cleanup already done, skip
+        if (!currentDeviceId.current) return; // no player/device to clean up
+
+        console.log("Cleaning up player...");
+
         isPlayerReady.current = false;
         fetch(`${API_BASE_URL}/api/player/cleanup`, {
             method: 'POST',
             credentials: 'include',
             keepalive: true,
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error(`Player cleanup failed with status ${res.status}`);
+            } else {
+                cleanupMade.current = true;
+            }
+        }).catch(err => {
+            console.error("Error during player cleanup:", err);
         });
-    };
-    // TODO fix this
-    const handleVisibilityChange = () => {
-        return;
-        
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        
-        if (document.visibilityState === 'hidden' && isMobile) {
-            handleCleanup();
-            playerInstance.current?.disconnect();
-            setClickedSomething(false);
-        }
     };
     const handleSongEndedOnBackend = async () => {
         if (!isPlayerReady.current) return;
@@ -134,30 +152,33 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         }).then(data => {
             if (!data.played)   
                 setCurrentTrack(null);
+            else
+                setTimeout(() => {
+                    isFetchingNext.current = false;
+                }, 1000);
         }).catch(err => {
             console.error("Error fetching next track:", err);
         });
     };
 
-    // remap spotify token to ref to avoid issues with stale closures in player event handlers
-    useEffect(() => {
-        tokenRef.current = spotifyUserToken;
-    }, [spotifyUserToken]);
+    // event handlers
+    const handleVisibilityChange = () => {
+        if (!playerInstance.current) return;
+        
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-    // refresh token
-    useEffect(() => {
-        if (!spotifyUserToken) {
-            refreshSpotifyToken();
-            return;
+        if (document.visibilityState === 'hidden' && isMobile) {
+            console.log("Non-desktop environment hidden - cleaning up player...");
+            cleanupPlayer();
+            playerInstance.current.disconnect();
+            setCurrentTrack(null);
+            setIsPlaying(false);
+            setProgressMs(0);
+        } else if (document.visibilityState === 'visible' && isMobile) {
+            console.log("Non-desktop environment visible - reinitializing player...");
+            playerInstance.current.connect();
         }
-
-        const REFRESH_INTERVAL = 45 * 60 * 1000; // 45 minutes
-        const refreshTimer = setTimeout(() => {
-            refreshSpotifyToken();
-        }, REFRESH_INTERVAL);
-
-        return () => clearTimeout(refreshTimer);
-    }, [spotifyUserToken]);
+    };
 
     // initialize player except when token is only being refreshed
     useEffect(() => {
@@ -172,15 +193,29 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
 
         return () => {
             window.removeEventListener('visibilitychange', handleVisibilityChange);
-            window.removeEventListener('beforeunload', handleCleanup);
-            
-            if (playerInstance.current) {
-                playerInstance.current.disconnect();
-                playerInstance.current = null;
-            }
+            window.removeEventListener('beforeunload', cleanupPlayer);
+            clearPlayer();
         };
     }, [spotifyUserToken !== null]);
 
+    // remap spotify token to ref to avoid issues with stale closures in player event handlers
+    useEffect(() => {
+        tokenRef.current = spotifyUserToken;
+    }, [spotifyUserToken]);
+    // refresh token
+    useEffect(() => {
+        if (!spotifyUserToken) {
+            refreshSpotifyToken();
+            return;
+        }
+
+        const REFRESH_INTERVAL = 45 * 60 * 1000; // 45 minutes
+        const refreshTimer = setTimeout(() => {
+            refreshSpotifyToken();
+        }, REFRESH_INTERVAL);
+
+        return () => clearTimeout(refreshTimer);
+    }, [spotifyUserToken]);
 
     return null;
 };

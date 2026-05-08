@@ -4,12 +4,12 @@ import { useAuth } from '../../global/contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
 import { usePlayerPlaybackData } from '../contexts/PlayerPlaybackContext';
 import { useParty } from '../../global/contexts/PartyContext';
-import image from '../../assets/Wlaz_Normal.png';
 import Navbar from '../../global/components/Navbar/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
 import album_placeholder from '../../assets/music_album_icon.svg';
+import QRCode from 'qrcode';
 
-const PlayerView = () => {
+const PlayerView = ({ rounded }) => {
   const { loadingAuth } = useAuth();
   const { currentTrack } = usePlayer();
   const { progressMs, progressPercent, joinPassword } = usePlayerPlaybackData();
@@ -24,8 +24,23 @@ const PlayerView = () => {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
+  const [qrDataUrl, setQrDataUrl] = useState('');
+  useEffect(() => {
+    if (!partyId) return;
+    QRCode.toDataURL(`127.0.0.1?partyId=${partyId}`, {
+      errorCorrectionLevel: 'H',
+      type: 'image/png',
+      quality: 0.95,
+      margin: 1,
+      width: 256
+    })
+    .then(url => setQrDataUrl(url))
+    .catch(err => console.error('Błąd generowania QR kodu:', err));
+  }, [partyId]);
+
+
   return (
-    <div className={styles.playerViewContainer}>
+    <div className={styles.playerViewContainer} style={{borderRadius: rounded ? '0 0 20px 20px' : '0'}}>
 
       {/* MAIN PLAYER */}
       <div className={styles.centralPlayer}>
@@ -96,7 +111,11 @@ const PlayerView = () => {
               style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}
             >
               <div className={styles.qrContainer}>
-                <img src={image} alt="QR Code" className={styles.qrImage} />
+                <img 
+                  src={qrDataUrl}
+                  alt="QR Code" 
+                  className={styles.qrImage}
+                />
               </div>
               
               <div className={styles.textCodes}>

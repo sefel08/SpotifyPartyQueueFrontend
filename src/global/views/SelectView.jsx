@@ -3,6 +3,7 @@ import styles from './SelectView.module.css';
 import Slider from '../components/Slider/Slider';
 import { useAuth } from '../contexts/AuthContext';
 import { useParty } from '../contexts/PartyContext';
+import SelectOptionGroup from './SelectSubViews/SelectOptionGroup';
 
 const SelectView = () => {
 
@@ -99,22 +100,20 @@ const SelectView = () => {
 
     // cookie consent
     if (!acceptedCookies) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.cardWrapper}>
-                    <button className={styles.card} onClick={() => { setAcceptedCookies(true); localStorage.setItem('acceptedCookies', 'true'); }}>
-                        <div className={styles.icon}>🍪</div>
-                        <div className={styles.title}>Akceptuję pliki cookie</div>
-                        <div className={styles.description}>Ta aplikacja używa plików cookie do poprawy działania i analizy ruchu. Kontynuując, zgadzasz się na naszą politykę prywatności.</div>
-                    </button>
-                    <button className={styles.card} onClick={() => alert('Musisz zaakceptować pliki cookie, aby korzystać z tej aplikacji.')}>
-                        <div className={styles.icon}>🚫</div>
-                        <div className={styles.title}>Odrzucam pliki cookie</div>
-                        <div className={styles.description}>Nie możesz korzystać z tej aplikacji bez akceptacji plików cookie.</div>
-                    </button>
-                </div>
-            </div>
-        );
+        return (<SelectOptionGroup 
+            options={[
+                { id: 'accept', title: 'Akceptuję pliki cookie', description: 'Ta aplikacja używa plików cookie do poprawnego działania. Kontynuując, zgadzasz się na naszą politykę prywatności.', icon: '🍪' },
+                { id: 'decline', title: 'Odrzucam pliki cookie', description: 'Nie możesz korzystać z tej aplikacji bez akceptacji plików cookie.', icon: '🚫' },
+            ]}
+            onSelect={(id) => {
+                if (id === 'accept') {
+                    setAcceptedCookies(true);
+                    localStorage.setItem('acceptedCookies', 'true');
+                } else if (id === 'decline') {
+                    alert('Musisz zaakceptować pliki cookie, aby korzystać z tej aplikacji.');
+                }
+            }} 
+        />);
     }
 
     // primary view select

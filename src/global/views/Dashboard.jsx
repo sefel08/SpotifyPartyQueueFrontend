@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, use, useRef } from 'react';
 import styles from './Dashboard.module.css';
 import { useAuth } from '../contexts/AuthContext';
 import { useParty } from '../contexts/PartyContext';
@@ -12,7 +12,6 @@ import { PlayerPlaybackProvider } from '../../player/contexts/PlayerPlaybackCont
 import { PartyProvider } from '../contexts/PartyContext';
 import Navbar from '../components/Navbar/Navbar';
 import SpotifySDKContainer from '../../player/components/SpotifySDKContainer';
-import { a } from 'framer-motion/client';
 
 const Dashboard = () => {
   
@@ -25,6 +24,8 @@ const Dashboard = () => {
   const [viewResetTrigger, setViewResetTrigger] = useState(0);
   const [mustRejoinParty, setMustRejoinParty] = useState(false);
 
+  const hasMoreThanOneRole = useRef(false);
+
   // currentview status check
   useEffect(() => {
     if (loadingAuth) return;
@@ -35,8 +36,13 @@ const Dashboard = () => {
     if (userRole.isHost) avaibleViews.push('host');
 
     setCurrentView(avaibleViews[0] || null);
-    if (avaibleViews.length === 0) setMustRejoinParty(true);
-    else setMustRejoinParty(false);
+    if (avaibleViews.length === 0) {
+      setMustRejoinParty(true);
+    } else {
+      setMustRejoinParty(false);
+    }
+
+    hasMoreThanOneRole.current = avaibleViews.length > 1;
   }, [loadingAuth]);
 
   const resetView = () => {
@@ -63,7 +69,7 @@ const Dashboard = () => {
   // Make sure user clicks something to disable auto-play block in browsers
   if (userRole.isPlayer && !clickedSomething) {
     return (
-      <div style={{ width: '100%', height: '100%', fontSize: '4rem', display: 'flex', alignItems: 'center', textAlign: 'center' }} onClick={() => setClickedSomething(true)}>
+      <div style={{ width: '100%', height: '100%', fontSize: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }} onClick={() => setClickedSomething(true)}>
         Kliknij w ekran, aby uruchomić odtwarzacz Spotify
       </div>
     );
@@ -81,7 +87,7 @@ const Dashboard = () => {
             }
 
             {currentView === 'player' ? (
-              <PlayerView />
+              <PlayerView rounded={hasMoreThanOneRole.current}/>
             ) : currentView === 'user' ? (
               <UserView goBackToViewSelection={resetView} resetTrigger={viewResetTrigger} />
             ) : currentView === 'party' ? (
