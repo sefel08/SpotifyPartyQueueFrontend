@@ -13,56 +13,6 @@
   box-sizing: border-box;
 }
 
-.cardWrapper {
-  display: flex;
-  gap: min(5vw, 50px);
-  width: 100%;
-  justify-content: center;
-  align-items: stretch;
-}
-
-.card {
-  flex: 1;
-  max-width: 400px;
-  height: min(60vh, 60vw);
-  height: min(60dvh, 60dvw);
-  max-height: 500px;
-
-  padding: 2vw;
-  background-color: #181818;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border-radius: 12px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  border: none;
-}
-.card:hover {
-  background-color: #282828;
-  transform: translateY(-5px);
-}
-
-@media (max-width: 700px) {
-  .container {
-    padding: 10vw;
-  }
-  .cardWrapper {
-    flex-direction: column;
-    height: 100%;
-  }
-  .card {
-    width: 100%;
-    max-width: none;
-    padding: 2vh 10vw;
-    padding: 2dvh 10dvw;
-  }
-}
-
 .icon {
   font-size: 3rem;
   margin-bottom: 10px;
@@ -97,33 +47,6 @@
     position: relative;
     width: 100%;
     margin: 2rem 0;
-}
-.inputBox {
-    width: 100%;
-    background-color: #282828;
-    border: 2px solid transparent;
-    border-radius: 12px;
-    padding: 15px 20px;
-    color: white;
-    font-size: 1.1rem;
-    outline: none;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
-.inputBox:focus {
-    border-color: #1DB954;
-    background-color: #333;
-    box-shadow: 0 0 15px rgba(29, 185, 84, 0.2);
-}
-.inputBox::placeholder {
-    color: #777;
-}
-.charCount {
-    position: absolute;
-    right: 15px;
-    bottom: -20px;
-    font-size: 0.75rem;
-    color: #535353;
 }
 .primaryButton {
     width: 100%;

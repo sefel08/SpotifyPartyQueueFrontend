@@ -56,13 +56,13 @@ export const AuthProvider = ({ children }) => {
         }
 
     };
-    const login = (asHost = false) => {
+    const login = (asPlayer = false) => {
         const currentUrl = window.location.href;
         const isNonStandard = currentUrl !== 'http://127.0.0.1:5173/';
         if (isNonStandard) {
             localStorage.setItem('postLoginRedirect', currentUrl);
         }
-        const endpoint = asHost ? 'spotify-host' : 'spotify';
+        const endpoint = asPlayer ? 'spotify-host' : 'spotify';
         window.location.href = `${API_BASE_URL}/oauth2/authorization/${endpoint}`;
     };
     const loginAsGuest = (displayName) => {

@@ -58,6 +58,18 @@ const Dashboard = () => {
     }
   }
 
+  // TODO change redirect url to env variable
+  // login error handling
+  if (new URLSearchParams(window.location.search).get('loginError')) {
+    return (
+      <div className={styles.errorPage}>
+        <h1>Błąd logowania</h1>
+        <p>Nie udało się zalogować do Spotify. Upewnij się, że masz aktywne połączenie z internetem i spróbuj ponownie.</p>
+        <button onClick={() => window.location.href = 'http://127.0.0.1:5173'}>Spróbuj ponownie</button>
+      </div>
+    );
+  }
+
   if (loadingAuth || loadingParty) {
     return <div className={styles.loading}>Ładowanie...</div>;
   }

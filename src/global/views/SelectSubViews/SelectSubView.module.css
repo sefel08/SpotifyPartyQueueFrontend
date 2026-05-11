@@ -11,14 +11,11 @@
 }
 .mainTitle {
     width: 100%;
-    height: 15%;
+    height: auto;
+    margin: 5% 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 .cardWrapper {
     width: 100%;
@@ -27,9 +24,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 2%;
 }
 .card {
+    max-height: 550px;
     width: 90%;
     flex: 1;
     padding: 0 5%;
@@ -44,8 +43,9 @@
     gap: 5%;
 }
 .icon {
-    font-size: 3rem;
+    font-size: 4rem;
     flex-shrink: 0;
+    color: var(--spotify-green);
 }
 .textWrapper {
     display: flex;
@@ -54,17 +54,17 @@
     flex: 1;
 }
 .title {
-    font-size: 1.6rem;
+    text-align: left;
+    font-size: 2rem;
     margin-bottom: 5px;
 }
 .description {
-    font-size: 0.85rem;
+    font-size: 1.2rem;
     text-align: left;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--spotify-light-gray);
 }
-
-
 .card {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -72,4 +72,237 @@
 .card:hover {
   background-color: #282828;
   transform: translateY(-5px);
+}
+
+/* Input view styles */
+.inputWrapper {
+    width: 90%;
+    max-width: 1000px;
+    height: auto;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #181818;
+    gap: 3%;
+    box-sizing: border-box;
+}
+.inputWrapper .mainTitle {
+    margin: 5% 0 0 0;
+}
+.inputDescription {
+    margin: 0 0 5% 0;
+    font-size: 1.2rem;
+    color: var(--spotify-light-gray);
+    text-align: center;
+    max-width: 80%;
+}
+.inputField {
+    width: 50%;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    background-color: #282828;
+    border: 2px solid #404040;
+    border-radius: 8px;
+    color: #fff;
+    transition: border-color 0.3s ease;
+}
+.inputField:focus {
+    outline: none;
+    border-color: var(--spotify-green);
+}
+.inputField::placeholder {
+    color: #888;
+}
+.errorMessage {
+    font-size: 0.95rem;
+    color: #e74c3c;
+    margin: 0;
+    text-align: center;
+}
+.submitButton {
+    margin: 5% 0 10% 0;
+    padding: 12px 30px;
+    font-size: 1rem;
+    background-color: var(--spotify-green);
+    color: #000;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.submitButton:hover {
+    background-color: #1db954;
+    transform: scale(1.05);
+}
+.submitButton:active {
+    transform: scale(0.98);
+}
+.submitButton:disabled {
+    background-color: #404040;
+    color: #888;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.submitButton:disabled:hover {
+    background-color: #404040;
+    transform: none;
+}
+
+/* Slider view styles */
+.sliderDisplay {
+    margin: 3% 0;
+    display: flex;
+    align-items: baseline;
+}
+.sliderValue {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--spotify-green);
+}
+.sliderUnit {
+    font-size: 1.2rem;
+    color: #888;
+    margin-left: 8px;
+    font-weight: 600;
+}
+.sliderInput {
+    width: 50%;
+    height: 8px;
+    background: #333;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.sliderInput::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+.sliderInput::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.4);
+}
+.sliderInput::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.sliderRange {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1%;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Checkbox view styles */
+.checkboxWrapper {
+    width: 90%;
+    max-width: 1000px;
+    height: auto;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #181818;
+    gap: 3%;
+    box-sizing: border-box;
+}
+.checkboxWrapper .mainTitle {
+    margin: 5% 0 0 0;
+}
+.checkboxDescription {
+    margin: 0 0 5% 0;
+    font-size: 1.2rem;
+    color: var(--spotify-light-gray);
+    text-align: center;
+    max-width: 80%;
+}
+.cardSelected {
+    background-color: #1db954 !important;
+    border: 2px solid var(--spotify-green);
+}
+.cardSelected .title,
+.cardSelected .description {
+    color: #000 !important;
+}
+.cardSelected .icon {
+    color: #000 !important;
+}
+
+/* Optimized checkbox card styles */
+.checkboxWrapper .card {
+    padding: 8px 12px;
+    gap: 10px;
+    flex: none;
+    height: auto;
+    transition: background-color 0.3s ease;
+}
+
+.checkboxWrapper .card:hover:not(.cardSelected) {
+    background-color: #282828;
+}
+
+.checkboxWrapper .icon {
+    font-size: 1.5rem;
+    min-width: 1.5rem;
+}
+
+.checkboxWrapper .textWrapper {
+    min-width: 0;
+    flex: 1;
+}
+
+.checkboxWrapper .title {
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+}
+
+.checkboxWrapper .cardSelected .title {
+    font-weight: bold;
+}
+
+.checkboxWrapper .description {
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    background-color: var(--spotify-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-right: 8px;
+    flex-shrink: 0;
+    color: #000;
 }
