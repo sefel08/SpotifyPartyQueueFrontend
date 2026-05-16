@@ -11,11 +11,7 @@ const UserProfile = () => {
 
     return (
         <div 
-<<<<<<< HEAD
             className={`${styles.profileCard} ${!spotifyAuthorized ? styles.notLoggedIn : ''}`} 
-=======
-            className={`${styles.profileCard} ${!spotifyAuthorized ? styles.loginPointer : ''}`} 
->>>>>>> 3e23b559d4717b70145d564883311c310fce0c58
             onClick={!spotifyAuthorized ? login : undefined}
         >
         {spotifyAuthorized && user ? (
