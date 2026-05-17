@@ -4,6 +4,7 @@ import { Client } from '@stomp/stompjs';
 import { partyStore } from '../stores/partyStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
+const WS_BASE_URL = import.meta.env.VITE_WS_URL;
 
 export const PartyContext = createContext();
 
@@ -28,7 +29,7 @@ export const PartyProvider = ({ children }) => {
         if (!partyId) return;
 
         const client = new Client({
-            brokerURL: 'ws://127.0.0.1:8080/ws-party',
+            brokerURL: `${WS_BASE_URL}/ws-party`,
             credentials: 'include',
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,

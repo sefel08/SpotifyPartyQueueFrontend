@@ -16,7 +16,7 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
     const isPlayerReady = useRef(false); // player on backend is ready and can accept playNext requests
     const currentDeviceId = useRef(null);
     
-    const isFetchingNext = useRef(false); // to prevent multiple playNext requests when song ends
+    const playerState = useRef('waitingForNewTrack'); // to prevent multiple playNext requests when song ends
     
     const lastTrackId = useRef(null);
     const cleanupMade = useRef(false);
@@ -59,33 +59,35 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
 
             // update contexts
             setIsPlaying(!paused);
-
             // if track changed, update track info in context
             if (currentTrack.id !== lastTrackId.current) {
-                setCurrentTrack({
-                    title: currentTrack.name,
-                    artists: currentTrack.artists,
-                    albumCover: currentTrack.album.images[0]?.url,
-                    durationMs: duration
-                });
+                if (currentTrack.id !== '4jaXxB0DJ6X4PdjMK8XVfu') { // filter out one second of silence track that I insert on force to skip
+                    setCurrentTrack({
+                        title: currentTrack.name,
+                        artists: currentTrack.artists,
+                        albumCover: currentTrack.album.images[0]?.url,
+                        durationMs: duration
+                    });
+                } else {
+                    setCurrentTrack(null);
+                }
                 lastTrackId.current = currentTrack.id;
                 return;
+            } else {
+                // if song wasn't changed, just update progress
+                setProgressMs(position);
+                if (playerState.current === 'waitingForNewTrack' && position > 0) {
+                    playerState.current = 'playing';
+                }
             }
 
-            console.log(`player state: `, state);
-
-            if (paused && position === 0 && !isFetchingNext.current) {
+            // check if song ended
+            if (playerState.current === 'playing' && (paused && position === 0)) {
                 console.log("Song ended");
-                isFetchingNext.current = true;
+                playerState.current = 'waitingForNewTrack';
                 await handleSongEndedOnBackend();
-                setTimeout(() => {
-                    isFetchingNext.current = false;
-                }, 1000);
                 return;
             }
-
-            // if song wasn't changed, just update progress
-            setProgressMs(position);
         });
 
         p.connect();
@@ -155,7 +157,7 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
             }
             return res.json()
         }).then(data => {
-            if (!data.played)   
+            if (!data.played)
                 setCurrentTrack(null);
         }).catch(err => {
             console.error("Error fetching next track:", err);

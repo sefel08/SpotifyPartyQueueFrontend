@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import album_placeholder from '../../assets/music_album_icon.svg';
 import QRCode from 'qrcode';
 
+const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
+
 const PlayerView = ({ rounded }) => {
   const { loadingAuth } = useAuth();
   const { currentTrack } = usePlayer();
@@ -27,7 +29,7 @@ const PlayerView = ({ rounded }) => {
   const [qrDataUrl, setQrDataUrl] = useState('');
   useEffect(() => {
     if (!partyId) return;
-    QRCode.toDataURL(`127.0.0.1?partyId=${partyId}`, {
+    QRCode.toDataURL(`${FRONTEND_URL}?partyId=${partyId}`, {
       errorCorrectionLevel: 'H',
       type: 'image/png',
       quality: 0.95,
