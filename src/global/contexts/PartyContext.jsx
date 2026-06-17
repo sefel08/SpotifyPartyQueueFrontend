@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { Client } from '@stomp/stompjs';
-import { partyStore } from '../stores/partyStore';
+import { partyStore } from '../stores/PartyStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 const WS_BASE_URL = import.meta.env.VITE_WS_URL;

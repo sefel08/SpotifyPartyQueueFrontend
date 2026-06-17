@@ -33,6 +33,7 @@ const SelectView = () => {
     
     // create states
     const [voteToSkipOption, setVoteToSkipOption] = useState(null);
+    const [instantSelfSkipOption, setInstantSelfSkipOption] = useState(null);
     const [moreOrEqualOption, setMoreOrEqualOption] = useState(null);
     const [specifiedThreshold, setSpecifiedThreshold] = useState(-1);
 
@@ -83,11 +84,12 @@ const SelectView = () => {
             let percentVoting = false;
             let moreThanThreshold = true;
             let voteThreshold = 0;
+            let instantSelfSkip = instantSelfSkipOption === 'yes';
             
             if (voteToSkipOption === 'everyone') {
-                percentVoting = false;
-                moreThanThreshold = true;
-                voteThreshold = 0;
+                percentVoting = true;
+                moreThanThreshold = false;
+                voteThreshold = 1;
             }
             else if (voteToSkipOption === 'exactlyHalf') {
                 percentVoting = true;
@@ -115,9 +117,9 @@ const SelectView = () => {
                 percentVoting,
                 moreThanThreshold,
                 voteThreshold,
+                instantSelfSkip,
             };
-            await createPartySessionAndJoin(partySettings, isUser, isPlayer, isHost);
-        
+            await createPartySessionAndJoin(partySettings, isUser, isPlayer, isHost);        
         } else if (operation === 'join') {
             if (!partyId) {
                 console.warn("Didn't provide a party ID to join operation.");
@@ -131,7 +133,7 @@ const SelectView = () => {
             }
             await joinPartySession(partyId, isUser, isPlayer, isHost);
         } else if (operation === 'joinOwn') {
-            await joinOwnPartySession(isUser, isPlayer, isHost);
+            await joinOwnPartySession(isUser, isPlayer, isHost);            
         }
 
         setProcessing(false);
@@ -275,6 +277,20 @@ const SelectView = () => {
                     ]}
                     onSelect={(id) => {
                         setVoteToSkipOption(id);
+                    }}
+                />
+            );
+        }
+
+        if (instantSelfSkipOption === null) {
+            return (
+                <SelectOptionGroup 
+                    options={[
+                        { id: 'yes', title: 'Tak', description: 'Pozwól użytkownikom, którzy dodali utwór, na jego natychmiastowe pominięcie.', icon: '✅' },
+                        { id: 'no', title: 'Nie', description: 'Nie pozwalaj na natychmiastowe pomijanie utworów przez użytkowników, którzy je dodali.', icon: '❌' },
+                    ]}
+                    onSelect={(id) => {
+                        setInstantSelfSkipOption(id);
                     }}
                 />
             );

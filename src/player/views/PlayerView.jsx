@@ -4,7 +4,6 @@ import { useAuth } from '../../global/contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
 import { usePlayerPlaybackData } from '../contexts/PlayerPlaybackContext';
 import { useParty } from '../../global/contexts/PartyContext';
-import Navbar from '../../global/components/Navbar/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
 import album_placeholder from '../../assets/music_album_icon.svg';
 import QRCode from 'qrcode';

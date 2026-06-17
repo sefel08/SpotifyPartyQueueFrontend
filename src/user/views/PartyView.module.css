@@ -58,6 +58,20 @@
     overflow-x: hidden;
     border-radius: 20px;
 }
+.mainContentHeader {
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--spotify-black);
+    text-align: center;
+}
+.currentlyPlaying {
+    margin-bottom: 1vh;
+    margin-bottom: 1dvh;
+    background-color: var(--spotify-green);
+    border-radius: 10px;
+    padding: 5px;
+}
 .addedTrackList {
     flex: 1;
     display: flex;

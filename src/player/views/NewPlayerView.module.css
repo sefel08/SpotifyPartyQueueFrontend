@@ -1,0 +1,138 @@
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.mainContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Section */
+.topSection {
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.spotifyLogo {
+  width: 120px;
+  height: auto;
+}
+.showQRButton {
+  padding: 10px 15px;
+
+  background-color: var(--spotify-green);
+  color: var(--spotify-black);
+  border-radius: 10px;
+
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+}
+.qrModal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+}
+.qrCode {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 30px;
+  border-radius: 4px;
+  box-shadow: 0 0 70px rgba(255, 255, 255, 0.3);
+}
+.modalHeader {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 5px 0 0 0;
+  font-family: 'Poppins', sans-serif;
+}
+.modalText {
+  color: var(--spotify-green);
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 0 0 5px 0;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Middle Section */
+.middleSection {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.albumImage {
+  width: 300px;
+  height: 300px;
+  border-radius: 4px;
+}
+.trackInfo {
+  text-align: center;
+}
+.trackTitle {
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 2rem;
+  font-weight: 700;
+}
+.trackArtist {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--spotify-light-gray);
+}
+/* Progress Bar */
+.progressBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 90%;
+}
+.timeLabel {
+  font-size: 0.85rem;
+  color: var(--spotify-light-gray);
+  font-family: 'Roboto Mono', monospace;
+}
+.progressBarBg {
+  flex: 1;
+  height: 12px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progressBarFill {
+  height: 100%;
+  background-color: var(--spotify-green);
+}
+
+/* Bottom Section */
+.bottomSection {
+  height: 10%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  align-items: end;
+  justify-content: center;
+}
+.showOptionsButton {
+  width: 54px;
+  height: 54px;
+  padding: 10px;
+  box-sizing: border-box;
+
+  background-color: var(--spotify-green);
+  color: var(--spotify-black);
+  border-radius: 50%;
+}

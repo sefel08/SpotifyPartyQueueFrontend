@@ -13,11 +13,11 @@ const PartyView = () => {
 
     const queueVersion = usePartySelector(state => state.partyQueueVersion);
     const usersVersion = usePartySelector(state => state.partyUsersVersion);
-    const [partyQueue, setPartyQueue] = useState([]);
+    const [partyQueueInfo, setPartyQueueInfo] = useState({ queue: [], currentlyPlaying: null });
     const [partyUsers, setPartyUsers] = useState([]);
 
     useEffect(() => {
-        getPartyQueue().then(queueData => setPartyQueue(queueData));
+        getPartyQueue().then(queueData => setPartyQueueInfo(queueData));
     }, [queueVersion]);
     useEffect(() => {
         getPartyUsers().then(usersData => setPartyUsers(usersData));
@@ -36,9 +36,23 @@ const PartyView = () => {
             <main className={styles.mainContent}>
                 {currentSubView === 'queue' ? (
                     <div className={styles.addedTrackList}>
-                        {partyQueue.map((item, index) => (
-                            <AddedTrack key={index} track={item.track} profile={item.profile} />
-                        ))}
+                        {partyQueueInfo.currentlyPlaying && (
+                        <div className={styles.currentlyPlaying}>
+                            <h3 className={styles.mainContentHeader}>Currently Playing</h3>
+                            {partyQueueInfo.currentlyPlaying && (
+                                <AddedTrack track={partyQueueInfo.currentlyPlaying.track} profile={partyQueueInfo.currentlyPlaying.profile} withoutUnderline={true} />
+                            )}
+                        </div>
+                        )}
+                        {partyQueueInfo.queue.length > 0 ?
+                        (<>
+                            <hr style={{ marginBottom: '1vh', marginBottom: '1dvh', marginTop: '0', width: '100%' }}/>
+                            {partyQueueInfo.queue.map((item, index) => (
+                                <AddedTrack key={index} track={item.track} profile={item.profile} />
+                            ))}
+                        </>) : (<>
+                            <h3 className={styles.mainContentHeader}>Queue is empty</h3>
+                        </>)}
                     </div>
                 ) : (
                     <div className={styles.userGrid}>
