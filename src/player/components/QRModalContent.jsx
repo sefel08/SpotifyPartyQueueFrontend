@@ -32,7 +32,7 @@ const QRModalContent = memo(({ partyId, joinPassword, onClose }) => {
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 onClick={onClose}
-                className={styles.showQRButton}
+                className={styles.showQRButton + ' ' + styles.hideQRButton}
                 style={{ marginTop: '20px' }}
             >
                 Hide QR Code

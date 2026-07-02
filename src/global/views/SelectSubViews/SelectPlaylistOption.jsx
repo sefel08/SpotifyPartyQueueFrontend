@@ -22,7 +22,6 @@ const SelectPlaylistOption = ({
                     Wybierz playlistę, z której system wylosuje utwory, gdy w kolejce zabraknie piosenek dodanych przez gości.
                 </p>
 
-                {/* Przewijalna lista playlist wewnątrz spotify-boxa */}
                 <div className={styles.playlistsScrollContainer}>
                     {playlists && playlists.length > 0 ? (
                         playlists.map((playlist) => (
@@ -38,7 +37,6 @@ const SelectPlaylistOption = ({
                     )}
                 </div>
 
-                {/* Przycisk pominięcia kroku */}
                 {onSkip && (
                     <button 
                         onClick={onSkip}

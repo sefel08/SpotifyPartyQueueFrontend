@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   const hasMoreThanOneRole = useRef(false);
 
-  // currentview status check
+  // Currentview status check
   useEffect(() => {
     if (loadingAuth) return;
 
@@ -52,6 +52,13 @@ const Dashboard = () => {
 
     hasMoreThanOneRole.current = avaibleViews.length > 1;
   }, [loadingAuth]);
+  // Check if user is in select view
+  useEffect(() => {
+    if (loadingAuth || loadingParty) return;    
+    if ((!authorized || !partyId) || mustRejoinParty) {
+      wasInSelect.current = true;
+    }
+  }, [loadingAuth, loadingParty, authorized, partyId, mustRejoinParty]);
 
   const handleViewChange = (view) => {
     if (view === currentView) {
@@ -62,84 +69,77 @@ const Dashboard = () => {
     }
   }
 
-  // login error handling
-  if (new URLSearchParams(window.location.search).get('loginError')) {
-    return (
-      <div className={styles.errorPage}>
-        <h1>Błąd logowania</h1>
-        <p>Nie udało się zalogować do Spotify. Upewnij się, że masz aktywne połączenie z internetem i spróbuj ponownie.</p>
-        <button onClick={() => window.location.href = VITE_FRONTEND_URL}>Spróbuj ponownie</button>
-      </div>
-    );
-  }
-
-  if (loadingAuth || loadingParty) {
-    return <div className={styles.loading}>Ładowanie...</div>;
-  }
-
-  if ((!authorized || !partyId) || mustRejoinParty) {
-    wasInSelect.current = true;
-    return (
-     <>
-      <button className={styles.selectViewRestartButton}
-        onClick={() => {
-          localStorage.removeItem('operation');
-          setSelectViewRestartTrigger(prev => prev + 1);
-        }}
-      >
-        <img src={restartIcon} alt="Restart" className={styles.selectViewRestartButtonicon}/>
-      </button>
-      <SelectView key={selectViewRestartTrigger} />
-     </>
-    );
-  }
-
-  // Make sure user clicks something to disable auto-play block in browsers
-  if (userRole.isPlayer && !wasInSelect.current && !clickedSomething) {    
-    return (
-      <div 
-        style={{ width: '100%', height: '100%', fontSize: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
-        onClick={() => {
-          setClickedSomething(true)
-          sessionStorage.setItem('clickedSomething', 'true');
-        }}
-      >
-        Kliknij w ekran, aby uruchomić odtwarzacz Spotify
-      </div>
-    );
-  }
-
   return (
-    <div className={styles.dashboard}>
+    <UserProvider>
+      <PlayerProvider isPlayer={userRole.isPlayer}>
+        <PlayerPlaybackProvider isPlayer={userRole.isPlayer}>
+        
+        {new URLSearchParams(window.location.search).get('loginError') ? (
+          ( /* login error handling */
+          <div className={styles.errorPage}>
+            <h1>Błąd logowania</h1>
+            <p>Nie udało się zalogować do Spotify. Upewnij się, że masz aktywne połączenie z internetem i spróbuj ponownie.</p>
+            <button onClick={() => window.location.href = VITE_FRONTEND_URL}>Spróbuj ponownie</button>
+          </div>
+          )
+        ) : (loadingAuth || loadingParty) ? (
+          ( /* loading state */
+            <div className={styles.dashboard}>
+              <div className={styles.loading}>Ładowanie...</div>
+            </div>
+          )
+        ) : ((!authorized || !partyId) || mustRejoinParty) ? (
+          ( /* Select view */
+            <>
+              <button className={styles.selectViewRestartButton}
+                onClick={() => {
+                  localStorage.removeItem('operation');
+                  setSelectViewRestartTrigger(prev => prev + 1);
+                }}
+              >
+                <img src={restartIcon} alt="Restart" className={styles.selectViewRestartButtonicon}/>
+              </button>
+              <SelectView key={selectViewRestartTrigger} />
+            </>
+          )
+        ) : (userRole.isPlayer && !wasInSelect.current && !clickedSomething) ? (    
+          ( /* Make sure user clicks something to disable auto-play block in browsers */
+            <div 
+              style={{ width: '100%', height: '100%', fontSize: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
+              onClick={() => {
+                setClickedSomething(true)
+                sessionStorage.setItem('clickedSomething', 'true');
+              }}
+            >
+              Kliknij w ekran, aby uruchomić odtwarzacz Spotify
+            </div>
+          )
+        ) : (
+          ( /* Main Dashboard */
+            <div className={styles.dashboard}>
+                {
+                  userRole.isPlayer && <SpotifySDKContainer setClickedSomething={setClickedSomething} />
+                }
+                {currentView === 'player' ? (
+                  // <PlayerView rounded={hasMoreThanOneRole.current}/>
+                  <NewPlayerView />
+                ) : currentView === 'user' ? (
+                  <UserView resetTrigger={viewResetTrigger} />
+                ) : currentView === 'party' ? (
+                  <PartyView />
+                ) : currentView === 'host' ? (
+                  <p style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Work in progress</p>
+                ) : (
+                  <p style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Something went wrong</p>
+                )}
+              <Navbar changeView={handleViewChange} />
+            </div>
+          )
+        )}
 
-      <UserProvider>
-        <PlayerProvider isPlayer={userRole.isPlayer}>
-          <PlayerPlaybackProvider isPlayer={userRole.isPlayer}>
-
-            {
-              userRole.isPlayer && <SpotifySDKContainer setClickedSomething={setClickedSomething} />
-            }
-
-            {currentView === 'player' ? (
-              // <PlayerView rounded={hasMoreThanOneRole.current}/>
-              <NewPlayerView />
-            ) : currentView === 'user' ? (
-              <UserView resetTrigger={viewResetTrigger} />
-            ) : currentView === 'party' ? (
-              <PartyView />
-            ) : currentView === 'host' ? (
-              <p style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Work in progress</p>
-            ) : (
-              <p style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Something went wrong</p>
-            )}
-
-          </PlayerPlaybackProvider>
-        </PlayerProvider>
-      </UserProvider>
-      
-      <Navbar changeView={handleViewChange} />
-
-    </div>
+        </PlayerPlaybackProvider>
+      </PlayerProvider>
+    </UserProvider>
   );
 };
 

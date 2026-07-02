@@ -46,7 +46,7 @@ const PartyView = () => {
                         )}
                         {partyQueueInfo.queue.length > 0 ?
                         (<>
-                            <hr style={{ marginBottom: '1vh', marginBottom: '1dvh', marginTop: '0', width: '100%' }}/>
+                            <hr style={{ marginBottom: '1dvh', marginTop: '0', width: '100%' }}/>
                             {partyQueueInfo.queue.map((item, index) => (
                                 <AddedTrack key={index} track={item.track} profile={item.profile} />
                             ))}

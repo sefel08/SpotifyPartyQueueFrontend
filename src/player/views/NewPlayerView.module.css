@@ -58,7 +58,6 @@
   font-weight: 600;
   margin: 5px 0 0 0;
   font-family: 'Poppins', sans-serif;
-  z-index: 1001;
 }
 .modalText {
   color: var(--spotify-green);
@@ -116,9 +115,9 @@
   transform-origin: right center;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  overflow: hidden;
 }
 .optionsButton {
+  position: relative;
   height: 100%;
   padding: 15px;
   box-sizing: border-box;
@@ -128,6 +127,10 @@
   justify-content: center;
   align-items: center;
 }
+.optionsButton:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
 .optionButtonImg {
   height: 100%;
   width: 100%;
@@ -136,6 +139,7 @@
   position: absolute;
   bottom: 110%;
 
+  width: 8rem;
   padding: 10px;
   background-color: var(--spotify-green);
   border-radius: 10px;
@@ -197,7 +201,7 @@
   .mainContainer {
     display: grid;
     grid-template-columns: 75% 25%;
-    grid-template-rows: 80% 20%;
+    grid-template-rows: 90% 10%;
   }
   .middleSection {
     grid-column: 1;
@@ -232,6 +236,22 @@
     grid-row: 2;
     height: 100%;
     width: 100%;
+    align-items: flex-end;
     background-color: var(--spotify-dark-gray);
+    box-sizing: border-box;
+  }
+   .optionsPanel {
+    height: auto;
+  }
+  .optionsButton {
+    height: auto;
+    padding: 10px;
+  }
+  .optionButtonImg {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+  .hideQRButton {
+    display: none;
   }
 }

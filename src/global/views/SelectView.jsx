@@ -378,15 +378,17 @@ const SelectView = () => {
         }
 
         if (!selectedPlaylistId) {
-            <SelectPlaylistOption
-                mainTitle="Muzyka rezerwowa"
-                onSelect={(playlistId) => {
-                    setSelectedPlaylistId(playlistId);
-                }}
-                onSkip={() => {
-                    setSelectedPlaylistId("none");
-                }}
-            />
+            return (
+                <SelectPlaylistOption
+                    mainTitle="Muzyka rezerwowa"
+                    onSelect={(playlistId) => {
+                        setSelectedPlaylistId(playlistId);
+                    }}
+                    onSkip={() => {
+                        setSelectedPlaylistId("none");
+                    }}
+                />
+            );
         }
 
         if (!joinAs) {

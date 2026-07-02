@@ -55,50 +55,8 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
 
         const p = playerInstance.current;
 
-        p.addListener('ready', ({ device_id }) => {
-            currentDeviceId.current = device_id;
-            console.log('Spotify Player is ready with device ID:', device_id);
-            p.setVolume(volume);
-            setupPlayer(device_id);
-        });
-        p.addListener('player_state_changed', async state => {
-            if (!state) return;
-
-            const currentTrack = state.track_window.current_track;
-            const { paused, position, duration } = state;
-
-            // update contexts
-            setIsPlaying(!paused);
-            // if track changed, update track info in context
-            if (currentTrack.id !== lastTrackId.current) {
-                if (currentTrack.id !== '4jaXxB0DJ6X4PdjMK8XVfu') { // filter out one second of silence track that I insert on force to skip
-                    setCurrentTrack({
-                        title: currentTrack.name,
-                        artists: currentTrack.artists,
-                        albumCover: currentTrack.album.images[0]?.url,
-                        durationMs: duration
-                    });
-                } else {
-                    setCurrentTrack(null);
-                }
-                lastTrackId.current = currentTrack.id;
-                return;
-            } else {
-                // if song wasn't changed, just update progress
-                setProgressMs(position);
-                if (playerState.current === 'waitingForNewTrack' && position > 0) {
-                    playerState.current = 'playing';
-                }
-            }
-
-            // check if song ended
-            if (playerState.current === 'playing' && (paused && position === 0)) {
-                console.log("Song ended");
-                playerState.current = 'waitingForNewTrack';
-                await handleSongEndedOnBackend();
-                return;
-            }
-        });
+        p.addListener('ready', handleReady);
+        p.addListener('player_state_changed', handlePlayerStateChanged);
 
         p.connect();
 
@@ -106,14 +64,90 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         window.addEventListener('beforeunload', cleanupPlayer);
     };
     const clearPlayer = () => {
+        console.log("Fully clearing Spotify player...");
+
+        window.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('beforeunload', cleanupPlayer);
+
         if (playerInstance.current) {
-            playerInstance.current.disconnect();
+            try {
+                playerInstance.current.removeListener('ready', handleReady);
+                playerInstance.current.removeListener('player_state_changed', handlePlayerStateChanged);
+                playerInstance.current.disconnect();
+            } catch (err) {
+                console.error("Error while disconnecting Spotify player:", err);
+            }
+
             playerInstance.current = null;
         }
+
+        if (window.onSpotifyWebPlaybackSDKReady) {
+            window.onSpotifyWebPlaybackSDKReady = null;
+        }
+
+        const script = document.getElementById('spotify-sdk');
+        if (script) {
+            script.remove();
+        }
+
+        document.querySelectorAll('iframe[src*="https://sdk.scdn.co/embedded/index.html"]').forEach(iframe => iframe.remove());
+
+        currentDeviceId.current = null;
+        isPlayerReady.current = false;
+        lastTrackId.current = null;
+        playerState.current = 'waitingForNewTrack';
+        cleanupMade.current = false;
     };
+
+    // SDK listeners
+    const handleReady = ({ device_id }) => {
+        currentDeviceId.current = device_id;
+        console.log('Spotify Player is ready with device ID:', device_id);
+        playerInstance.current.setVolume(volume);
+        setupPlayer(device_id);
+    };
+    const handlePlayerStateChanged = async (state) => {
+        if (!state) return;
+
+        const currentTrack = state.track_window.current_track;
+        const { paused, position, duration } = state;
+
+        // update contexts
+        setIsPlaying(!paused);
+        // if track changed, update track info in context
+        if (currentTrack.id !== lastTrackId.current) {
+            if (currentTrack.id !== '4jaXxB0DJ6X4PdjMK8XVfu') { // filter out one second of silence track that I insert on force to skip
+                setCurrentTrack({
+                    title: currentTrack.name,
+                    artists: currentTrack.artists,
+                    albumCover: currentTrack.album.images[0]?.url,
+                    durationMs: duration
+                });
+            } else {
+                setCurrentTrack(null);
+            }
+            lastTrackId.current = currentTrack.id;
+            return;
+        } else {
+            // if song wasn't changed, just update progress
+            setProgressMs(position);
+            if (playerState.current === 'waitingForNewTrack' && position > 0) {
+                playerState.current = 'playing';
+            }
+        }
+
+        // check if song ended
+        if (playerState.current === 'playing' && (paused && position === 0)) {
+            console.log("Song ended");
+            playerState.current = 'waitingForNewTrack';
+            await handleSongEndedOnBackend();
+            return;
+        }
+    }
 
     // backend player methods
     const setupPlayer = (deviceId) => {
+        console.log("Setting up player on backend with device ID:", deviceId);
         fetch(`${API_BASE_URL}/api/player/setup`, {
                 method: 'POST',
                 credentials: 'include',
@@ -126,7 +160,7 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
             }).then(() => {
                 isPlayerReady.current = true;
                 cleanupMade.current = false; // reset cleanup flag on new setup
-                setTimeout(handleSongEndedOnBackend, 1000);
+                handleSongEndedOnBackend(); // request next track on setup
             }).catch(err => {
                 console.error("Error during player setup:", err);
             });
@@ -198,15 +232,14 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         if (!spotifyUserToken) return;
         if (playerInstance.current) return;
 
-        if (window.Spotify) {
-            initPlayer();
-        } else {
-            createPlayer();
-        }
+        // if (window.Spotify) {
+        //     initPlayer();
+        // } else {
+        //     createPlayer();
+        // }
+        createPlayer();
 
         return () => {
-            window.removeEventListener('visibilitychange', handleVisibilityChange);
-            window.removeEventListener('beforeunload', cleanupPlayer);
             clearPlayer();
         };
     }, [spotifyUserToken !== null]);
