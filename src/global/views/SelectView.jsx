@@ -8,6 +8,7 @@ import SelectOptionGroup from './SelectSubViews/SelectOptionGroup';
 import SelectInputOption from './SelectSubViews/SelectInputOption';
 import SelectSliderOption from './SelectSubViews/SelectSliderOption';
 import SelectCheckboxOption from './SelectSubViews/SelectCheckboxOption';
+import SelectPlaylistOption from './SelectSubViews/SelectPlaylistOption';
 
 const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL
 
@@ -35,6 +36,7 @@ const SelectView = () => {
     const [voteToSkipOption, setVoteToSkipOption] = useState(null);
     const [moreOrEqualOption, setMoreOrEqualOption] = useState(null);
     const [specifiedThreshold, setSpecifiedThreshold] = useState(-1);
+    const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
 
     // join states
     const [isGuest, setIsGuest] = useState(false);
@@ -357,6 +359,18 @@ const SelectView = () => {
                     />
                 );
             }
+        }
+
+        if (!selectedPlaylistId) {
+            <SelectPlaylistOption
+                mainTitle="Muzyka rezerwowa"
+                onSelect={(playlistId) => {
+                    setSelectedPlaylistId(playlistId);
+                }}
+                onSkip={() => {
+                    setSelectedPlaylistId("none");
+                }}
+            />
         }
 
         if (!joinAs) {

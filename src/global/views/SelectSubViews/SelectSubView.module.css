@@ -307,3 +307,34 @@
     flex-shrink: 0;
     color: #000;
 }
+
+/* Select playlist view styles */
+.playlistsScrollContainer {
+    width: 80%;
+    max-height: 350px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 8px;
+    margin: 2% 0;
+}
+.playlistsScrollContainer::-webkit-scrollbar {
+    width: 6px;
+}
+.playlistsScrollContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+.playlistsScrollContainer::-webkit-scrollbar-thumb {
+    background: #404040;
+    border-radius: 3px;
+}
+.playlistsScrollContainer::-webkit-scrollbar-thumb:hover {
+    background: #535353;
+}
+.noPlaylistsText {
+    color: var(--spotify-light-gray);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
