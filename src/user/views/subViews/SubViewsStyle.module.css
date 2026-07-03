@@ -9,7 +9,7 @@
 }
 .containerUpgrade {
     background: linear-gradient(to bottom, 
-        rgba(255, 255, 255, 0.2) 0%, 
+        var(--spotify-medium-border) 0%, 
         var(--spotify-black) 300px,
         var(--spotify-black) 100%
     );}
@@ -55,7 +55,7 @@
     margin-bottom: 1rem;
 }
 .chip {
-    background-color: #282828;
+    background-color: var(--spotify-gray);
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -119,8 +119,8 @@
     aspect-ratio: 1/1;
     border-radius: 20px 0 20px 0;
     background: var(--spotify-dark-gray);
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: 1px solid var(--spotify-light-border);
+    border-bottom: 1px solid var(--spotify-light-border);
     font-size: 1.75rem;
     cursor: pointer;
 }

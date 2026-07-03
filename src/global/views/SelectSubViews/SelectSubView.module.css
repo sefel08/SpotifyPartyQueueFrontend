@@ -34,7 +34,7 @@
     flex: 1;
     padding: 0 5%;
 
-    background-color: #181818;
+    background-color: var(--spotify-dark-gray);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     border-radius: 15px;
 
@@ -71,7 +71,7 @@
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 .card:hover {
-  background-color: #282828;
+  background-color: var(--spotify-gray);
   transform: translateY(-5px);
 }
 
@@ -81,13 +81,13 @@
     max-width: 1000px;
     height: auto;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--spotify-light-border);
     padding: 5%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #181818;
+    background-color: var(--spotify-dark-gray);
     gap: 3%;
     box-sizing: border-box;
 }
@@ -105,7 +105,7 @@
     width: 50%;
     padding: 15px 20px;
     font-size: 1.1rem;
-    background-color: #282828;
+    background-color: var(--spotify-gray);
     border: 2px solid #404040;
     border-radius: 8px;
     color: #fff;
@@ -137,7 +137,7 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 .submitButton:hover {
-    background-color: #1db954;
+    background-color: var(--spotify-green-active);
     transform: scale(1.05);
 }
 .submitButton:active {
@@ -218,13 +218,13 @@
     max-width: 1000px;
     height: auto;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--spotify-light-border);
     padding: 5%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #181818;
+    background-color: var(--spotify-dark-gray);
     gap: 3%;
     box-sizing: border-box;
 }
@@ -239,7 +239,7 @@
     max-width: 80%;
 }
 .cardSelected {
-    background-color: #1db954 !important;
+    background-color: var(--spotify-green) !important;
     border: 2px solid var(--spotify-green);
 }
 .cardSelected .title,
@@ -260,7 +260,7 @@
 }
 
 .checkboxWrapper .card:hover:not(.cardSelected) {
-    background-color: #282828;
+    background-color: var(--spotify-gray);
 }
 
 .checkboxWrapper .icon {
@@ -318,19 +318,6 @@
     gap: 8px;
     padding-right: 8px;
     margin: 2% 0;
-}
-.playlistsScrollContainer::-webkit-scrollbar {
-    width: 6px;
-}
-.playlistsScrollContainer::-webkit-scrollbar-track {
-    background: transparent;
-}
-.playlistsScrollContainer::-webkit-scrollbar-thumb {
-    background: #404040;
-    border-radius: 3px;
-}
-.playlistsScrollContainer::-webkit-scrollbar-thumb:hover {
-    background: #535353;
 }
 .noPlaylistsText {
     color: var(--spotify-light-gray);

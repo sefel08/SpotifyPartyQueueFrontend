@@ -16,7 +16,7 @@ const Queuebar = ({ queue = [] }) => {
                         <TrackCard key={index} track={track} onClick={() => { removeFromQueue(index) }}/>
                     ))
                 ) : (
-                    <p style={{ color: '#b3b3b3', textAlign: 'center', fontSize: '1.25rem' }}>
+                    <p style={{ color: 'var(--spotify-light-gray)', textAlign: 'center', fontSize: '1.25rem' }}>
                         Kolejka jest pusta
                     </p>
                 )}

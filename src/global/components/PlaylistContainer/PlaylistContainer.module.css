@@ -14,7 +14,7 @@
     padding: 0.75rem;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     max-height: none;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--spotify-light-border);
     border-radius: 1rem;    
 }
 .loggedOutCard {
@@ -27,10 +27,10 @@
 .loggedOutCardImage {
     width: 40%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--spotify-light-border);
 }
 .logOutMessage {
-    color: #b3b3b3;
+    color: var(--spotify-light-gray);
     text-align: center;
     position: absolute;
     font-size: 1.5rem;

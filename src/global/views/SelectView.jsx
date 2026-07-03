@@ -87,6 +87,7 @@ const SelectView = () => {
             let moreThanThreshold = true;
             let voteThreshold = 0;
             let instantSelfSkip = instantSelfSkipOption === 'yes';
+            const fallbackPlaylistId = selectedPlaylistId === 'none' ? null : selectedPlaylistId;
             
             if (voteToSkipOption === 'everyone') {
                 percentVoting = true;
@@ -120,6 +121,7 @@ const SelectView = () => {
                 moreThanThreshold,
                 voteThreshold,
                 instantSelfSkip,
+                fallbackPlaylistId,
             };
             await createPartySessionAndJoin(partySettings, isUser, isPlayer, isHost);        
         } else if (operation === 'join') {

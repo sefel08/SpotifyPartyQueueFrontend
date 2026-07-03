@@ -3,7 +3,6 @@ import styles from './Dashboard.module.css';
 import { useAuth } from '../contexts/AuthContext';
 import { useParty } from '../contexts/PartyContext';
 import SelectView from './SelectView';
-import PlayerView from '../../player/views/PlayerView';
 import UserView from '../../user/views/UserView';
 import PartyView from '../../user/views/PartyView';
 import NewPlayerView from '../../player/views/NewPlayerView';

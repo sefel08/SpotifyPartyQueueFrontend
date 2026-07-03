@@ -105,7 +105,7 @@ const NewPlayerView = () => {
                 <img src={currentTrack ? currentTrack.albumCover || album_placeholder : album_placeholder}
                      alt="Album Cover"
                      className={styles.albumImage}
-                     style={currentTrack ? { boxShadow: '0 0 150px rgba(255, 255, 255, 0.3)' } : {}}
+                     style={currentTrack ? { boxShadow: '0 0 150px var(--spotify-strong-border)' } : {}}
                 />
                 <div className={styles.trackInfo}>
                     <h2 className={styles.trackTitle}>{currentTrack ? currentTrack.title : 'No Track Playing'}</h2>
@@ -203,7 +203,7 @@ const NewPlayerView = () => {
                 </AnimatePresence>
 
                 <motion.button
-                    className={styles.optionsButton}
+                    className={styles.optionsButton + ' ' + styles.mainOptionsButton}
                     initial={{ borderRadius: '50%' }}
                     animate={
                         !showOptions ? { borderRadius: '50%' } : { borderRadius: '0', borderTopRightRadius: '50%', borderBottomRightRadius: '50%' }

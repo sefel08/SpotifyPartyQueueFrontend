@@ -8,7 +8,7 @@
 }
 .addedBy {
     color: var(--spotify-gray);
-    background-color: var(--spotify-player);
+    background-color: var(--spotify-gray);
     color: var(--spotify-light-gray);
     display: flex;
     align-items: center;

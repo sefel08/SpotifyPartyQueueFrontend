@@ -3,7 +3,7 @@
   height: min(8vh, 15vw);
   height: min(8dvh, 15dvw);
   background-color: var(--spotify-dark-gray);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid var(--spotify-light-border);
   border-radius: 20px 20px 0 0;
   display: flex;
   z-index: 1000;

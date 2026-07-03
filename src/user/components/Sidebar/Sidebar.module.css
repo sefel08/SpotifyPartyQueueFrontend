@@ -1,6 +1,6 @@
 .sidebarContainer {
     padding: 20px;
-    background-color: #121212;
+    background-color: var(--spotify-black);
     min-height: 100vh;
     min-height: 100dvh;
     display: flex;
@@ -11,7 +11,7 @@
 .footer {
     padding-top: 20px;
     margin-top: auto;
-    border-top: 1px solid #282828;
+    border-top: 1px solid var(--spotify-gray);
     width: 100%;
 }
 
@@ -31,7 +31,7 @@
     text-align: left;
 }
 .backButton:hover {
-    color: #ffffff;
+    color: var(--spotify-white);
     transform: translateX(-4px); 
 }
 .backButton:active {

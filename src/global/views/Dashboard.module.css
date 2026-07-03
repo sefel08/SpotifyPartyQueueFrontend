@@ -21,7 +21,7 @@
     justify-content: center;
     gap: 20px;
     padding: 20px;
-    background-color: #121212;
+    background-color: var(--spotify-black);
     color: #fff;
     font-family: Calibri, sans-serif;
     box-sizing: border-box;
@@ -83,7 +83,7 @@
     }
 }
 .selectViewRestartButton:hover {
-    background-color: var(--spotify-green-hover);
+    background-color: var(--spotify-green-active);
     animation: rotate360 0.5s ease-out 1;
 }
 

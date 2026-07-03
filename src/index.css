@@ -1,12 +1,16 @@
 :root {
   --spotify-green: #1DB954;
-  --spotify-green-hover: #1ed760;
+  --spotify-green-active: #1ed760;
   --spotify-black: #121212;
   --spotify-dark-gray: #181818;
+  --spotify-gray: #282828;
   --spotify-light-gray: #b3b3b3;
   --spotify-white: #ffffff;
-  --spotify-player: #282828;
   --spotify-red: #e22134;
+
+  --spotify-strong-border: rgba(255, 255, 255, 0.3);
+  --spotify-medium-border: rgba(255, 255, 255, 0.2);
+  --spotify-light-border: rgba(255, 255, 255, 0.1);
 
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
@@ -63,18 +67,15 @@ button {
     width: 12px;
     height: 12px;
 }
-
 ::-webkit-scrollbar-track {
     background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--spotify-strong-border);
     border-radius: 10px;
     border: 3px solid transparent;
     background-clip: content-box;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: var(--spotify-medium-border);
 }

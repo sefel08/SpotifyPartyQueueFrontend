@@ -12,7 +12,7 @@
 .progressBarBg {
   flex: 1;
   height: 12px;
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: var(--spotify-light-border);
   border-radius: 10px;
   overflow: hidden;
 }

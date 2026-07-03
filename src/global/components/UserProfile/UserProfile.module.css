@@ -3,10 +3,10 @@
   align-items: center;
   gap: 12px; 
   padding: 8px;
-  background-color: #181818;
+  background-color: var(--spotify-dark-gray);
   border-radius: 12px;
   transition: all 0.2s ease-in-out;
-  border: 1px solid #282828;
+  border: 1px solid var(--spotify-gray);
   box-sizing: border-box;
 }
 
@@ -14,8 +14,8 @@
   cursor: pointer;
 }
 .notLoggedIn:hover {
-  background-color: #282828;
-  border-color: #1DB954;
+  background-color: var(--spotify-gray);
+  border-color: var(--spotify-green);
   transform: translateY(-2px);
 }
 

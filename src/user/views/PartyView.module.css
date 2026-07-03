@@ -18,7 +18,7 @@
     padding: 0 1vh;
 
     background-color: var(--spotify-dark-gray);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--spotify-light-border);
     border-radius: 0 0 20px 20px;
     box-sizing: border-box;
 
