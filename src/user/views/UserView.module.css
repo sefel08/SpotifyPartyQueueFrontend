@@ -74,8 +74,6 @@
     flex: 1;
     background-color: var(--spotify-black);
     color: var(--spotify-white);
-    /* overflow-y: auto;
-    overflow-x: hidden; */
     overflow: hidden;
     border-radius: 20px;
 }

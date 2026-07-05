@@ -3,8 +3,6 @@
     flex-direction: column;
     width: 100%;
     height: auto;
-    padding: 3vh;
-    padding: 3dvh;
     box-sizing: border-box;
 }
 .containerUpgrade {
@@ -16,7 +14,7 @@
 .header {
     font-size: 2rem;
     font-weight: 800;
-    margin-top: 0.5rem;
+    margin-top: 0;
     margin-bottom: 0.8rem;
     color: var(--spotify-white);
     letter-spacing: -0.04rem;

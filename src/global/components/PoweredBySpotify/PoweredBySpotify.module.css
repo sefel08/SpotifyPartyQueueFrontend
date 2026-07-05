@@ -1,0 +1,20 @@
+.spotifyLogoContainer {
+    width: 100%;
+    padding: max(2vh, 8px) max(6vw, 24px);
+    padding: max(2dvh, 8px) max(6dvw, 24px);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+}
+.poweredByText {
+    font-size: 12px;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    margin-right: 8px;
+    color: var(--spotify-green);
+}
+.spotifyLogo {
+    width: 70px;
+    height: auto;
+    align-self: center;
+}

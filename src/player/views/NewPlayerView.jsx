@@ -113,7 +113,7 @@ const NewPlayerView = ({ onlyPlayer }) => {
                 </div>
                 <TrackProgressBar />
             </section>
-            <section className={styles.bottomSection + ' ' + styles.bottomSectionMobile}>
+            <section className={`${styles.bottomSection} ${styles.bottomSectionMobile} ${!onlyPlayer ? styles.bottomSectionRounded : ''}`}>
                 <AnimatePresence>
                     {showOptions && (
                         <motion.div
@@ -215,8 +215,8 @@ const NewPlayerView = ({ onlyPlayer }) => {
                     <img src={options_icon} alt="Options" className={styles.optionButtonImg} />
                 </motion.button>
             </section>
-            <section className={styles.bottomSection + ' ' + styles.bottomSectionDesktop}>
-                <button className={styles.optionsButton} onClick={() => handleOptionClick('leave')}>
+            <section className={`${styles.bottomSection} ${styles.bottomSectionDesktop} ${!onlyPlayer ? styles.bottomSectionRounded : ''}`}>
+                <button className={`${styles.optionsButton} ${!onlyPlayer ? styles.bottomSectionRounded : ''}`} onClick={() => handleOptionClick('leave')}>
                     <img src={leave_icon} alt="Leave" className={styles.optionButtonImg} />
                 </button>
                 <AnimatePresence>
@@ -248,8 +248,8 @@ const NewPlayerView = ({ onlyPlayer }) => {
                         </motion.button>
                     </motion.div>)}
                 </AnimatePresence>
-                <button className={styles.optionsButton} >
-                    <img src={speaker_icon} alt="Volume" className={styles.optionButtonImg} onClick={() => handleOptionClick('volume')} />
+                <button className={styles.optionsButton} onClick={() => handleOptionClick('volume')}>
+                    <img src={speaker_icon} alt="Volume" className={styles.optionButtonImg} />
                 </button>
                 <AnimatePresence>
                     {activeOption === 'volume' && (
@@ -265,8 +265,8 @@ const NewPlayerView = ({ onlyPlayer }) => {
                         </motion.div>
                     )}
                 </AnimatePresence>
-                <button className={styles.optionsButton} >
-                    <img src={equalizer_icon} alt="Resolution" className={styles.optionButtonImg} onClick={() => handleOptionClick('resolution')} />
+                <button className={styles.optionsButton} onClick={() => handleOptionClick('resolution')}>
+                    <img src={equalizer_icon} alt="Resolution" className={styles.optionButtonImg} />
                 </button>
                 <AnimatePresence>
                     {activeOption === 'resolution' && (

@@ -1,16 +1,17 @@
 import React, { use, useEffect, useState } from 'react';
+import styles from './UserView.module.css';
 
 import { useAuth } from '../../global/contexts/AuthContext';
 import { useUser } from '../contexts/UserContext';
 import { useParty } from '../../global/contexts/PartyContext';
+import { usePartySelector } from '../../global/components/usePartySelector';
 
+import PoweredBySpotify from '../../global/components/PoweredBySpotify/PoweredBySpotify';
 import Sidebar from '../components/Sidebar/Sidebar';
 import MainBox from '../components/Mainbox/MainBox';
 import Queuebar from '../../global/components/Queuebar/Queuebar';
-import styles from './UserView.module.css';
 
 import SkipIcon from '../../assets/skip_icon.svg?react';
-import { usePartySelector } from '../../global/components/usePartySelector';
 
 const UserView = ({ resetTrigger }) => {
     
@@ -51,6 +52,7 @@ const UserView = ({ resetTrigger }) => {
 
             {/* Main Content */}
             <main className={styles.mainContent}>
+                <PoweredBySpotify />
                 <MainBox userName={user.name} currentView={currentSubView} lastView={lastView} setView={handleViewChange} />
                 <button className={styles.showQueueBtn} onClick={() => setQueueOpen(true)}>Pokaż kolejkę</button>
                 <button className={`${styles.skipButton} ${votedToSkip ? styles.active : ''}`} onClick={handleSkip}>

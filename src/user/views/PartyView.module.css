@@ -54,6 +54,7 @@
     color: var(--spotify-white);
     padding: 2vh;
     padding: 2dvh;
+    padding-top: 0;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 20px;

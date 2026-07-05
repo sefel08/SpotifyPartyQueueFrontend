@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParty } from "../../global/contexts/PartyContext";
 import styles from "./PartyView.module.css";
+
+import { useParty } from "../../global/contexts/PartyContext";
+import { usePartySelector } from "../../global/components/usePartySelector";
+
+import PoweredBySpotify from "../../global/components/PoweredBySpotify/PoweredBySpotify";
 import AddedTrack from "../components/AddedTrack/AddedTrack";
 import UserCard from "../components/UserCard/UserCard";
-import { usePartySelector } from "../../global/components/usePartySelector";
 
 const PartyView = () => {
 
@@ -34,6 +37,7 @@ const PartyView = () => {
 
             {/* Main Content */}
             <main className={styles.mainContent}>
+                <PoweredBySpotify />
                 {currentSubView === 'queue' ? (
                     <div className={styles.addedTrackList}>
                         {partyQueueInfo.currentlyPlaying && (

@@ -1,4 +1,6 @@
 .mainContentArea {
     height: 100%;
     overflow-y: auto;
+    padding: 0 3vh 3vh 3vh;
+    padding: 0 3dvh 3dvh 3dvh;
 }

@@ -130,6 +130,9 @@
 .bottomSectionDesktop {
   display: none;
 }
+.bottomSectionRounded {
+  border-bottom-left-radius: 20px !important;
+}
 .optionsPanel {
   display: flex;
   flex-direction: row;
@@ -244,6 +247,9 @@
     margin-right: 31px;
     font-size: 2rem;
   }
+  .bottomSection {
+    margin: 31px;
+  }
   .optionButtonImg {
     height: 4rem;
     width: 4rem;
@@ -295,24 +301,31 @@
     width: 100%;
     background-color: var(--spotify-dark-gray);
 
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 0;    
   }
   .spotifyLogo {
-    width: 253px;
-    margin: 36;
+    width: 75%;
+    max-width: 500px;
+    margin: calc(75% * (406 / 1483) * 0.4);
+  }
+  .modalHeader {
+    font-size: clamp(1.25rem, 2vw, 2.75rem);
   }
   .modalText {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 2vw, 3rem);
   }
   .mobileQRWrapper {
     display: none;
   }
   .qrCode {
-    width: 300px;
-    height: 300px;
+    width: 75%;
+    max-width: 500px;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
   .tvQRWrapper {
     display: flex;
