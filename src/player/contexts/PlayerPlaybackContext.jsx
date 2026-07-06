@@ -13,7 +13,14 @@ export const PlayerPlaybackProvider = ({ children, isPlayer }) => {
     const { currentTrack } = usePlayer();
     const [isPlaying, setIsPlaying] = useState(false);
     const [progressMs, setProgressMs] = useState(0);
-    const [volume, setVolume] = useState(0.5);
+    const [volume, setVolume] = useState(() => {
+        const savedVolume = localStorage.getItem('volume');
+        return savedVolume !== null ? parseFloat(savedVolume) : 0.5;
+    });
+    const handleVolumeChange = (newVolume) => {
+        setVolume(newVolume);
+        localStorage.setItem('volume', newVolume);
+    }
 
     const [joinPassword, setJoinPassword] = useState('1462');
 
@@ -35,7 +42,7 @@ export const PlayerPlaybackProvider = ({ children, isPlayer }) => {
     const progressPercent = currentTrack?.durationMs > 0 ? (progressMs / currentTrack.durationMs) * 100 : 0;
 
 
-    const actions = useMemo(() => ({ setIsPlaying, setProgressMs, setVolume }), []);
+    const actions = useMemo(() => ({ setIsPlaying, setProgressMs, setVolume: handleVolumeChange }), []);
 
     return (
         <PlayerPlaybackActionsContext.Provider value={actions}>

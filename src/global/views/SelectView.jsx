@@ -21,7 +21,6 @@ const SelectView = () => {
     const [loading, setLoading] = useState(true);
 
     // global states
-    const [acceptedCookies, setAcceptedCookies] = useState(() => localStorage.getItem('acceptedCookies') === 'true' );
     const [operation, setOperation] = useState(() => {
         const oldOperation = localStorage.getItem('operation');
         if (oldOperation) {
@@ -66,11 +65,6 @@ const SelectView = () => {
     }, [operation, joinAs, enteredPartyId, nickname, spotifyAuthorized]);
 
     const handleParty = async (operation, joinAs, partyId = null, voteToSkipOption = null) => {
-        if (!acceptedCookies) {
-            alert("Musisz zaakceptować pliki cookie, aby korzystać z tej aplikacji.");
-            return;
-        }
-
         if (processing) return;
         setProcessing(true);
         setLoading(true);
@@ -142,24 +136,6 @@ const SelectView = () => {
 
         setProcessing(false);
         setLoading(false);
-    }
-
-    // cookie consent
-    if (!acceptedCookies) {
-        return (<SelectOptionGroup 
-            options={[
-                { id: 'accept', title: 'Akceptuję pliki cookie', description: 'Ta aplikacja używa plików cookie do poprawnego działania. Kontynuując, zgadzasz się na naszą politykę prywatności.', icon: '🍪' },
-                { id: 'decline', title: 'Odrzucam pliki cookie', description: 'Nie możesz korzystać z tej aplikacji bez akceptacji plików cookie.', icon: '🚫' },
-            ]}
-            onSelect={(id) => {
-                if (id === 'accept') {
-                    setAcceptedCookies(true);
-                    localStorage.setItem('acceptedCookies', 'true');
-                } else if (id === 'decline') {
-                    alert('Musisz zaakceptować pliki cookie, aby korzystać z tej aplikacji.');
-                }
-            }} 
-        />);
     }
 
     if (loading) {

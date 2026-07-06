@@ -12,7 +12,9 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
 
     const { setCurrentTrack } = usePlayer();
     const { setProgressMs, setIsPlaying, setVolume } = usePlayerPlaybackActions();
+    
     const { volume } = usePlayerPlaybackData();
+    const volumeRef = useRef(volume);
 
     const playerInstance = useRef(null);
     const isPlayerReady = useRef(false); // player on backend is ready and can accept playNext requests
@@ -23,8 +25,9 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
     const lastTrackId = useRef(null);
     const cleanupMade = useRef(false);
 
-    // set player volume
+    // update volume
     useEffect(() => {
+        volumeRef.current = volume;
         if (playerInstance.current) {
             playerInstance.current.setVolume(volume);
         }
@@ -50,7 +53,7 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         playerInstance.current = new window.Spotify.Player({
             name: 'Party Player for Spotify',
             getOAuthToken: cb => { cb(tokenRef.current); },
-            volume: 0.25
+            volume: volumeRef.current
         });
 
         const p = playerInstance.current;
@@ -103,7 +106,8 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
     const handleReady = ({ device_id }) => {
         currentDeviceId.current = device_id;
         console.log('Spotify Player is ready with device ID:', device_id);
-        playerInstance.current.setVolume(volume);
+        console.log('Setting initial volume to:', volumeRef.current);
+        playerInstance.current.setVolume(volumeRef.current);
         setupPlayer(device_id);
     };
     const handlePlayerStateChanged = async (state) => {
@@ -147,7 +151,7 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
 
     // backend player methods
     const setupPlayer = (deviceId) => {
-        console.log("Setting up player on backend with device ID:", deviceId);
+        console.log("Setting up player on backend");
         fetch(`${API_BASE_URL}/api/player/setup`, {
                 method: 'POST',
                 credentials: 'include',
@@ -232,11 +236,6 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         if (!spotifyUserToken) return;
         if (playerInstance.current) return;
 
-        // if (window.Spotify) {
-        //     initPlayer();
-        // } else {
-        //     createPlayer();
-        // }
         createPlayer();
 
         return () => {

@@ -1,15 +1,19 @@
 import React, { useState, useEffect, use, useRef } from 'react';
 import styles from './Dashboard.module.css';
-import { useAuth } from '../contexts/AuthContext';
-import { useParty } from '../contexts/PartyContext';
-import SelectView from './SelectView';
-import UserView from '../../user/views/UserView';
-import PartyView from '../../user/views/PartyView';
-import NewPlayerView from '../../player/views/NewPlayerView';
+
 import { UserProvider } from '../../user/contexts/UserContext';
 import { PlayerProvider } from '../../player/contexts/PlayerContext';
 import { PlayerPlaybackProvider } from '../../player/contexts/PlayerPlaybackContext';
 import { PartyProvider } from '../contexts/PartyContext';
+
+import { useAuth } from '../contexts/AuthContext';
+import { useParty } from '../contexts/PartyContext';
+
+import EulaView from './EulaView/EulaView';
+import SelectView from './SelectView';
+import UserView from '../../user/views/UserView';
+import PartyView from '../../user/views/PartyView';
+import NewPlayerView from '../../player/views/NewPlayerView';
 import Navbar from '../components/Navbar/Navbar';
 import SpotifySDKContainer from '../../player/components/SpotifySDKContainer';
 
@@ -21,6 +25,8 @@ const Dashboard = () => {
   
   const { authorized, loadingAuth, userRole } = useAuth();
   const { loadingParty, partyId } = useParty();
+
+  const [eulaAccepted, setEulaAccepted] = useState(() => localStorage.getItem('acceptedEula') === 'true' );
 
   const wasInSelect = useRef(false);
   const [clickedSomething, setClickedSomething] = useState(false);
@@ -78,7 +84,7 @@ const Dashboard = () => {
           <div className={styles.errorPage}>
             <h1>Błąd logowania</h1>
             <p>Nie udało się zalogować do Spotify. Upewnij się, że masz aktywne połączenie z internetem i spróbuj ponownie.</p>
-            <button onClick={() => window.location.href = VITE_FRONTEND_URL}>Spróbuj ponownie</button>
+            <button onClick={() => window.location.href = FRONTEND_URL}>Spróbuj ponownie</button>
           </div>
           )
         ) : (loadingAuth || loadingParty) ? (
@@ -86,6 +92,13 @@ const Dashboard = () => {
             <div className={styles.dashboard}>
               <div className={styles.loading}>Ładowanie...</div>
             </div>
+          )
+        ) : (!eulaAccepted) ? (
+          ( /* EULA acceptance view */
+            <EulaView onAccept={() => {
+              setEulaAccepted(true);
+              localStorage.setItem('acceptedEula', 'true');
+            }} />
           )
         ) : ((!authorized || !partyId) || mustRejoinParty) ? (
           ( /* Select view */

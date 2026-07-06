@@ -1,0 +1,145 @@
+.eulaContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--spotify-black);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--spotify-white);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.eulaBox {
+  background-color: var(--spotify-dark-gray);
+  border-radius: 12px;
+  padding: 40px;
+  max-width: 650px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+.eulaTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.eulaSubtitle {
+  font-size: 14px;
+  color: var(--spotify-light-gray);
+  margin: 0 0 24px 0;
+}
+
+.eulaScrollContent {
+  background-color: #242424;
+  border-radius: 8px;
+  padding: 20px;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 24px;
+  border: 1px solid var(--spotify-gray);
+}
+
+.eulaScrollContent h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--spotify-green);
+  margin: 16px 0 6px 0;
+}
+
+.eulaScrollContent h3:first-child {
+  margin-top: 0;
+}
+
+.eulaScrollContent p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e5e5e5;
+  margin: 0 0 12px 0;
+}
+
+.pdfDownloadBox {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--spotify-gray);
+  text-align: center;
+}
+
+.pdfLink {
+  color: var(--spotify-green);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.pdfLink:hover {
+  color: var(--spotify-green-active);
+  text-decoration: underline;
+}
+
+.eulaForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkboxInput {
+  margin-top: 3px;
+  accent-color: var(--spotify-green);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkboxText {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--spotify-light-gray);
+}
+
+.checkboxLabel:hover .checkboxText {
+  color: var(--spotify-white);
+}
+
+.acceptButton {
+  background-color: var(--spotify-green);
+  color: var(--spotify-white);
+  border: none;
+  border-radius: 50px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.acceptButton:hover:not(:disabled) {
+  background-color: var(--spotify-green-active);
+  transform: scale(1.02);
+}
+
+.acceptButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.acceptButton:disabled {
+  background-color: #535353;
+  color: var(--spotify-light-gray);
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
