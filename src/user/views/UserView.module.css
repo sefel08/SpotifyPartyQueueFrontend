@@ -4,7 +4,7 @@
     flex-direction: column;
     gap: 1.5vh;
     gap: 1.5dvh;
-    height: 100%;
+    flex: 1;
     width: 100vw;
     overflow: hidden;
     background-color: #000;

@@ -82,19 +82,19 @@ const Dashboard = () => {
         <PlayerPlaybackProvider isPlayer={userRole.isPlayer}>
           <TrackCardFlyingProvider>
 
+            <div className={styles.dashboard}>
+
             {new URLSearchParams(window.location.search).get('loginError') ? (
               ( /* login error handling */
-              <div className={styles.errorPage}>
+                <>
                 <h1>Błąd logowania</h1>
                 <p>Nie udało się zalogować do Spotify. Upewnij się, że masz aktywne połączenie z internetem i spróbuj ponownie.</p>
                 <button onClick={() => window.location.href = FRONTEND_URL}>Spróbuj ponownie</button>
-              </div>
+                </>
               )
             ) : (loadingAuth || loadingParty) ? (
               ( /* loading state */
-                <div className={styles.dashboard}>
-                  <div className={styles.loading}>Ładowanie...</div>
-                </div>
+                <div className={styles.loading}>Ładowanie...</div>
               )
             ) : (!eulaAccepted) ? (
               ( /* EULA acceptance view */
@@ -120,7 +120,7 @@ const Dashboard = () => {
             ) : (userRole.isPlayer && !wasInSelect.current && !clickedSomething) ? (    
               ( /* Make sure user clicks something to disable auto-play block in browsers */
                 <div 
-                  style={{ width: '100%', height: '100%', fontSize: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
+                  style={{ width: '100%', flex: 1, fontSize: '4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}
                   onClick={() => {
                     setClickedSomething(true)
                     sessionStorage.setItem('clickedSomething', 'true');
@@ -131,28 +131,27 @@ const Dashboard = () => {
               )
             ) : (
               ( /* Main Dashboard */
-                <div className={styles.dashboard}>
-                    {
-                      userRole.isPlayer && <SpotifySDKContainer setClickedSomething={setClickedSomething} />
-                    }
-                    {currentView === 'player' ? (
-                      // <PlayerView rounded={hasMoreThanOneRole.current}/>
-                      <NewPlayerView onlyPlayer={userRole.isPlayer && !userRole.isUser && !userRole.isHost} />
-                    ) : currentView === 'user' ? (
-
-                        <UserView resetTrigger={viewResetTrigger} />
-
-                    ) : currentView === 'party' ? (
-                      <PartyView />
-                    ) : currentView === 'host' ? (
-                      <p style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Work in progress</p>
-                    ) : (
-                      <p style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Something went wrong</p>
-                    )}
+                <>    
+                  {
+                    userRole.isPlayer && <SpotifySDKContainer setClickedSomething={setClickedSomething} />
+                  }
+                  {currentView === 'player' ? (
+                    <NewPlayerView onlyPlayer={userRole.isPlayer && !userRole.isUser && !userRole.isHost} />
+                  ) : currentView === 'user' ? (
+                    <UserView resetTrigger={viewResetTrigger} />
+                  ) : currentView === 'party' ? (
+                    <PartyView />
+                  ) : currentView === 'host' ? (
+                    <p style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Work in progress</p>
+                  ) : (
+                    <p style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Something went wrong</p>
+                  )}
                   <Navbar changeView={handleViewChange} />
-                </div>
+                </>
               )
             )}
+
+            </div>
 
           </TrackCardFlyingProvider>
         </PlayerPlaybackProvider>

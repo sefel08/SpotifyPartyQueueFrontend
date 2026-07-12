@@ -1,5 +1,5 @@
 {
-  "name": "spotify-party",
+  "name": "fairq",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -28,5 +28,17 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "vite": "^8.0.16"
-  }
+  },
+  "description": "Spotify Party Frontend 🎵\r A lightweight Spotify-inspired web app for real-time collaborative party queue.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sefel08/FairQFrontend.git"
+  },
+  "author": "sefel08",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/sefel08/FairQFrontend/issues"
+  },
+  "homepage": "https://github.com/sefel08/FairQFrontend#readme"
 }
