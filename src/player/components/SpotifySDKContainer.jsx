@@ -3,6 +3,7 @@ import { useAuth } from '../../global/contexts/AuthContext';
 import { usePlayer } from '../contexts/PlayerContext';
 import { usePlayerPlaybackActions } from '../contexts/PlayerPlaybackContext';
 import { usePlayerPlaybackData } from '../contexts/PlayerPlaybackContext';
+import { requestWakeLock, releaseWakeLock } from '../../global/wakeLock.js';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -32,6 +33,15 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
             playerInstance.current.setVolume(volume);
         }
     }, [volume]);
+
+    // set wake lock when player is playing
+    useEffect(() => {
+        requestWakeLock();
+
+        return () => {
+            releaseWakeLock();
+        }
+    }, []);
 
     // browser player methods
     const createPlayer = () => {
@@ -228,6 +238,7 @@ const SpotifySDKContainer = ({ setClickedSomething }) => {
         } else if (document.visibilityState === 'visible' && isMobile) {
             console.log("Non-desktop environment visible - reinitializing player...");
             playerInstance.current.connect();
+            requestWakeLock();
         }
     };
 

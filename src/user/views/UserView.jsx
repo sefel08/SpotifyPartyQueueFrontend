@@ -32,6 +32,7 @@ const UserView = ({ resetTrigger }) => {
     }, [userQueueVersion]);
     useEffect(() => {
         setCurrentSubView('home');
+        setSelectedPlaylist(null);
     }, [resetTrigger]);
 
     return (
