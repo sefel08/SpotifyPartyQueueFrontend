@@ -5,6 +5,7 @@ import { partyStore } from '../stores/PartyStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 const WS_BASE_URL = import.meta.env.VITE_WS_URL;
+const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
 export const PartyContext = createContext();
 
@@ -68,7 +69,7 @@ export const PartyProvider = ({ children }) => {
                 switch (messageData.type) {
                     case 'REFRESH_STATUS':
                         console.log('Received REFRESH_STATUS message, refreshing auth status');
-                        window.location.reload();
+                        window.location.href = FRONTEND_URL;
                         break;
                     case 'REFRESH_TOKEN':
                         console.log('Received REFRESH_TOKEN message, refreshing spotify token');

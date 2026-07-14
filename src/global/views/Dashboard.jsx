@@ -6,6 +6,7 @@ import { UserProvider } from '../../user/contexts/UserContext';
 import { PlayerProvider } from '../../player/contexts/PlayerContext';
 import { PlayerPlaybackProvider } from '../../player/contexts/PlayerPlaybackContext';
 import { PartyProvider } from '../contexts/PartyContext';
+import { HostProvider } from '../../host/HostContext';
 
 import { useAuth } from '../contexts/AuthContext';
 import { useParty } from '../contexts/PartyContext';
@@ -14,6 +15,7 @@ import EulaView from './EulaView/EulaView';
 import SelectView from './SelectView';
 import UserView from '../../user/views/UserView';
 import PartyView from '../../user/views/PartyView';
+import HostView from '../../host/HostView.jsx';
 import NewPlayerView from '../../player/views/NewPlayerView';
 import Navbar from '../components/Navbar/Navbar';
 import SpotifySDKContainer from '../../player/components/SpotifySDKContainer';
@@ -79,8 +81,9 @@ const Dashboard = () => {
   return (
     <UserProvider>
       <PlayerProvider isPlayer={userRole.isPlayer}>
-        <PlayerPlaybackProvider isPlayer={userRole.isPlayer}>
-          <TrackCardFlyingProvider>
+        <HostProvider>
+          <PlayerPlaybackProvider isPlayer={userRole.isPlayer}>
+            <TrackCardFlyingProvider>
 
             <div className={styles.dashboard}>
             
@@ -161,7 +164,7 @@ const Dashboard = () => {
                   ) : currentView === 'party' ? (
                     <PartyView />
                   ) : currentView === 'host' ? (
-                    <p style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Work in progress</p>
+                    <HostView />
                   ) : (
                     <p style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center'}}>Something went wrong</p>
                   )}
@@ -172,8 +175,9 @@ const Dashboard = () => {
 
             </div>
 
-          </TrackCardFlyingProvider>
-        </PlayerPlaybackProvider>
+            </TrackCardFlyingProvider>
+          </PlayerPlaybackProvider>
+        </HostProvider>
       </PlayerProvider>
     </UserProvider>
   );
