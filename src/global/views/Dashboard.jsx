@@ -25,7 +25,7 @@ const FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL
 
 const Dashboard = () => {
   
-  const { authorized, loadingAuth, userRole } = useAuth();
+  const { authorized, loadingAuth, userRole, wantToLogin, setWantToLogin, login } = useAuth();
   const { loadingParty, partyId } = useParty();
 
   const [eulaAccepted, setEulaAccepted] = useState(() => localStorage.getItem('acceptedEula') === 'true' );
@@ -83,13 +83,32 @@ const Dashboard = () => {
           <TrackCardFlyingProvider>
 
             <div className={styles.dashboard}>
+            
+            {wantToLogin && (
+            <div className={styles.beforeLoginModal}>
+              <h1 className={styles.dashboardHeader}>Uwaga</h1>
+              <p className={styles.dashboardDescription}>
+                Aplikacja jest w trybie demo/developerskim, jeżeli chcesz zalogować się do Spotify poproś mnie (sefla), żeby dodał cię na listę osób upoważnionych do zalogowania. Maksymalna ilość osób upoważnionych to 5, więc jak nie potrzebujesz dostępu do swoich playlist spotify to zaloguj się jako gość.
+              </p>
+              <button className={styles.dashboardButton} onClick={login}>
+                Zostałem dodany i kontynuuję
+              </button>
+              <button className={styles.dashboardButton} onClick={() => setWantToLogin(false)}>
+                Powrót
+              </button>
+            </div>
+            )}
 
             {new URLSearchParams(window.location.search).get('loginError') ? (
               ( /* login error handling */
                 <>
-                <h1>Błąd logowania</h1>
-                <p>Nie udało się zalogować do Spotify. Upewnij się, że masz aktywne połączenie z internetem i spróbuj ponownie.</p>
-                <button onClick={() => window.location.href = FRONTEND_URL}>Spróbuj ponownie</button>
+                <h1 className={styles.dashboardHeader}>Błąd logowania</h1>
+                <p className={styles.dashboardDescription}>
+                  Nie udało się zalogować do Spotify. Upewnij się, że masz aktywne połączenie z internetem i spróbuj ponownie.
+                </p>
+                <button className={styles.dashboardButton} onClick={() => window.location.href = FRONTEND_URL}>
+                  Spróbuj ponownie
+                </button>
                 </>
               )
             ) : (loadingAuth || loadingParty) ? (

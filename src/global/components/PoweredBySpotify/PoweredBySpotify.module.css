@@ -4,14 +4,24 @@
     padding: max(2dvh, 8px) max(6dvw, 24px);
     box-sizing: border-box;
     display: flex;
+    gap: 10px;
     justify-content: center;
+}
+.logoName {
+    font-size: 14px;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    color: var(--spotify-green);
+    display: flex;
+    align-items: center;
 }
 .poweredByText {
     font-size: 12px;
     font-family: 'Trebuchet MS', sans-serif;
     font-weight: 600;
-    margin-right: 8px;
     color: var(--spotify-green);
+    display: flex;
+    align-items: center;
 }
 .spotifyLogo {
     width: 70px;

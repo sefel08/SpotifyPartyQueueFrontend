@@ -13,6 +13,8 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState({ displayName: '', imageUrl: '', smallImageUrl: '' });
     const [userRole, setUserRole] = useState({ isUser: false, isPlayer: false, isHost: false });
 
+    const [wantToLogin, setWantToLogin] = useState(false);
+
     const [spotifyUserToken, setSpotifyUserToken] = useState(null);
 
     const [loadingAuth, setLoadingAuth] = useState(true);
@@ -57,6 +59,11 @@ export const AuthProvider = ({ children }) => {
 
     };
     const login = (asPlayer = false) => {
+        if (!wantToLogin) {
+            setWantToLogin(true);
+            return;
+        }
+        setWantToLogin(false);
         const currentUrl = window.location.href;
         const isNonStandard = currentUrl !== FRONTEND_URL && currentUrl !== `${FRONTEND_URL}/`;
         if (isNonStandard) {
@@ -115,7 +122,7 @@ export const AuthProvider = ({ children }) => {
     }, [userRole.isPlayer, spotifyAuthorized, refreshSpotifyToken]);
 
     return (
-        <AuthContext.Provider value={{ authorized, spotifyAuthorized, loadingAuth, user, login, refreshStatus, loginAsGuest, spotifyUserToken, isPremium, hasHostPermissions, refreshSpotifyToken, userRole }}>
+        <AuthContext.Provider value={{ authorized, spotifyAuthorized, loadingAuth, user, login, refreshStatus, loginAsGuest, spotifyUserToken, isPremium, hasHostPermissions, refreshSpotifyToken, userRole, wantToLogin, setWantToLogin }}>
             {children}
         </AuthContext.Provider>
     );
