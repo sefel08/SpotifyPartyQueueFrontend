@@ -11,23 +11,23 @@ import PlaylistContainer from '../../../global/components/PlaylistContainer/Play
 const HomeView = ({ setView }) => {
 
     const { user } = useAuth();
-    const { setSearchQuery, searchQuery, searchResults, setSearchResults, queryForResults, setQueryForResults, userPlaylists, setSelectedTrackContainer } = useUser();
+    const { searchForResults, userPlaylists, setViewItem } = useUser();
 
     const handleSearch = (query) => {
-        setSearchQuery(query);
+        searchForResults(query);
         setView('search');
     }
 
     return (
         <div className={styles.container}>
             
-            <SearchBox onSearch={handleSearch} />
+            <SearchBox onSearch={(query) => handleSearch(query)} />
             
             <h1 className={styles.header}>Dzień dobry, {user.displayName || "Użytkowniku"}</h1>
             
             <PlaylistContainer style={ { marginBottom: '1rem' } }>
                 {userPlaylists.map((playlist) => (
-                    <TrackContainerCard key={playlist.id} container={playlist} onClick={() => setSelectedTrackContainer(playlist)} variant={"compact"} />
+                    <TrackContainerCard key={playlist.id} container={playlist} onClick={() => setViewItem(playlist, 'container')} variant={"compact"} />
                 ))}
             </PlaylistContainer>
 

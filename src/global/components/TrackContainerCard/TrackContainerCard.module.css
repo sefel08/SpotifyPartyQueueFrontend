@@ -3,24 +3,22 @@
     align-items: center;
     background-color: var(--spotify-dark-gray);
     border-radius: 4px;
-    padding: 5px;
     cursor: pointer;
-    gap: 15px;
+    gap: 12px;
     transition: background-color 0.3s;
     overflow: hidden;
     flex-shrink: 0;
 }
 
 .image {
-    width: 4rem;
-    height: 4rem;
+    width: 56px;
+    height: 56px;
     border-radius: 4px;
     object-fit: cover;
     flex-shrink: 0;
 }
 
 .textContainer {
-    height: 4rem;
     display: flex;
     flex-direction: column;
     justify-content: center;

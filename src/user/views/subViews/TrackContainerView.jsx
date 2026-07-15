@@ -12,7 +12,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const TrackContainerView = ({ onBack }) => {
     
-    const { selectedTrackContainer, addToQueue } = useUser();
+    const { selectedTrackContainer, addToQueue, goBackInViewHistory } = useUser();
 
     const TRACKS_RETURN_LIMIT = 50; // backend returns 50 tracks per request
     const [tracks, setTracks] = useState([]);
@@ -72,11 +72,11 @@ const TrackContainerView = ({ onBack }) => {
 
     return (
         <>
-            <button className={styles.backButton} onClick={onBack}>⬅</button>
+            <button className={styles.backButton} onClick={goBackInViewHistory}>⬅</button>
             <div className={styles.container}>
                 <div className={styles.playlistDataWrapper}>
                     <img 
-                        src={selectedTrackContainer.imageUrl || defaultImage}
+                        src={selectedTrackContainer.largeImageUrl || defaultImage}
                         alt={selectedTrackContainer.name} 
                         className={styles.playlistImage} 
                     />

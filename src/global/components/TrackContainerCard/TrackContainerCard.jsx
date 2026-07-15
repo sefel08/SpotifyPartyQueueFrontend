@@ -1,13 +1,15 @@
 import React from 'react';
 import style from './TrackContainerCard.module.css';
 
+import defaultImage from '../../../assets/spotify_icon.png';
+
 const TrackContainerCard = ({ container, onClick, variant }) => {
   
   const cardClass = `${style.playlistCard} ${variant === 'compact' ? style.compact : ''}`;
 
   return (
     <div className={cardClass} onClick={() => onClick?.(container)}>
-      <img src={container.imageUrl} alt={container.name} className={style.image} />
+      <img src={container.smallImageUrl || defaultImage} alt={container.name} className={style.image} />
       <div className={style.textContainer}>
         <h3 className={style.name}>{container.name}</h3>
           {variant !== 'compact' && (

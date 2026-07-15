@@ -2,12 +2,14 @@ import React, { useCallback } from 'react';
 import styles from './TrackCard.module.css';
 
 import { useTrackFlyTrigger } from '../../../user/contexts/TrackCardFlyingContext';
+import { useUser } from '../../../user/contexts/UserContext';
 import { motion } from 'framer-motion';
 
 import spotify_icon from "../../../assets/spotify_icon_black.png";
 
 const TrackCard = ({ isOpen, onClick, track, queueItemId, listUniqueId, options, squared }) => {
   
+  const { setSelectedArtistFromId } = useUser();
   const triggerFlyingTrack = useTrackFlyTrigger();
 
   const handleOpenInSpotify = useCallback(() => {
@@ -53,16 +55,26 @@ const TrackCard = ({ isOpen, onClick, track, queueItemId, listUniqueId, options,
     <div className={styles.trackCardContainer} >
       <motion.div layout className={styles.trackCard + (squared ? ' ' + styles.squared : '')} onClick={() => onClick(listUniqueId)}>
         <img 
-          src={track.imageUrl} 
+          src={track.smallImageUrl || spotify_icon} 
           alt={track.name} 
           className={styles.albumImage + (squared ? ' ' + styles.squared : '')} 
         />
         
         <div className={styles.trackDetails}>
           <span className={styles.trackName}>{track.name}</span>
-          <span className={styles.trackArtists}>
-            {track.artists && track.artists.join(', ')}
-          </span>
+          {track.artists && track.artists.length > 0 ? (
+            <div className={styles.artistsWrapper}>
+              {track.artists.map((artist, index) => (
+                <span key={index} className={styles.trackArtists} onClick={() => setSelectedArtistFromId(artist.id)}>
+                  {artist.name}
+                </span>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.artistsWrapper}>
+              <span className={styles.trackArtists}>Unknown Artist</span>
+            </div>
+          )}
         </div>
 
         <div className={styles.trackMeta}>

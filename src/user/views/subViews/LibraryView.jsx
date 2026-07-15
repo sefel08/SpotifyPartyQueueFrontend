@@ -9,7 +9,7 @@ import UserProfile from '../../../global/components/UserProfile/UserProfile';
 
 const LibraryView = () => {
 
-    const { userPlaylists, setSelectedTrackContainer } = useUser();
+    const { userPlaylists, setViewItem } = useUser();
     const { authorized, login } = useAuth();
 
     return (
@@ -27,7 +27,7 @@ const LibraryView = () => {
             {/* playlist cards */}
             <div className={styles.list}>
                 {userPlaylists.map(playlist => (
-                    <TrackContainerCard key={playlist.id} container={playlist} onClick={() => setSelectedTrackContainer(playlist)} />
+                    <TrackContainerCard key={playlist.id} container={playlist} onClick={() => setViewItem(playlist, 'container')} />
                 ))}
             </div>
         </div>

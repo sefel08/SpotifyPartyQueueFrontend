@@ -53,9 +53,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.trackArtists {
+.artistsWrapper {
     width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.trackArtists {
     display: block;
+    flex-shrink: 0;
 
     color: var(--spotify-light-gray);
     font-size: 0.75rem;

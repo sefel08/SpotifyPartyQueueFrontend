@@ -98,7 +98,7 @@ const FlyingTrackRenderer = ({ setFlyingTracks }) => {
               {trackInstance.track.name}
             </span>
             <span style={{ color: 'var(--spotify-light-gray)', fontSize: '12px' }}>
-              {trackInstance.track.artists?.join(', ')}
+              {trackInstance.track.artists?.map(artist => artist.name).join(', ') || 'Unknown Artist'}
             </span>
           </motion.div>
         </motion.div>
