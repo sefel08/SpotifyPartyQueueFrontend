@@ -15,7 +15,8 @@ export const UserProvider = ({ children }) => {
     const [searchResults, setSearchResults] = useState([]);
 
     const [userPlaylists, setUserPlaylists] = useState([]);
-    const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+    
+    const [selectedTrackContainer, setSelectedTrackContainer] = useState(null);
 
     const [queue, setQueue] = useState([]);
 
@@ -84,7 +85,7 @@ export const UserProvider = ({ children }) => {
             searchQuery, setSearchQuery, 
             queryForResults, setQueryForResults, 
             userPlaylists, refreshUserQueue,
-            selectedPlaylist, setSelectedPlaylist,
+            selectedTrackContainer, setSelectedTrackContainer,
             queue, addToQueue, removeFromQueue,
         }}>
             {children}

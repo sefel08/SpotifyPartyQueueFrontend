@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './SelectSubView.module.css';
-import PlaylistCard from '../../components/PlaylistCard/PlaylistCard';
+import TrackContainerCard from '../../components/TrackContainerCard/TrackContainerCard';
 
 import { useUser } from '../../../user/contexts/UserContext';
 
@@ -25,9 +25,9 @@ const SelectPlaylistOption = ({
                 <div className={styles.playlistsScrollContainer}>
                     {playlists && playlists.length > 0 ? (
                         playlists.map((playlist) => (
-                            <PlaylistCard
+                            <TrackContainerCard
                                 key={playlist.id}
-                                playlist={playlist}
+                                container={playlist}
                                 variant="normal"
                                 onClick={() => onSelect(playlist.id)}
                             />

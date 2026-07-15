@@ -4,12 +4,12 @@ import styles from './SubViewsStyle.module.css';
 import { useAuth } from '../../../global/contexts/AuthContext';
 import { useUser } from '../../contexts/UserContext';
 
-import PlaylistCard from '../../../global/components/PlaylistCard/PlaylistCard';
+import TrackContainerCard from '../../../global/components/TrackContainerCard/TrackContainerCard';
 import UserProfile from '../../../global/components/UserProfile/UserProfile';
 
 const LibraryView = () => {
 
-    const { userPlaylists, setSelectedPlaylist } = useUser();
+    const { userPlaylists, setSelectedTrackContainer } = useUser();
     const { authorized, login } = useAuth();
 
     return (
@@ -27,7 +27,7 @@ const LibraryView = () => {
             {/* playlist cards */}
             <div className={styles.list}>
                 {userPlaylists.map(playlist => (
-                    <PlaylistCard key={playlist.id} playlist={playlist} onClick={() => setSelectedPlaylist(playlist)} />
+                    <TrackContainerCard key={playlist.id} container={playlist} onClick={() => setSelectedTrackContainer(playlist)} />
                 ))}
             </div>
         </div>

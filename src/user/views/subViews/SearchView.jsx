@@ -4,6 +4,7 @@ import styles from './SubViewsStyle.module.css';
 import { useUser } from '../../contexts/UserContext';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
+import TrackContainerCard from '../../../global/components/TrackContainerCard/TrackContainerCard';
 import TrackList from '../../../global/components/TrackList';
 
 import addToQueueIcon from '../../../assets/add_to_queue_icon.svg';
@@ -12,7 +13,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const SearchView = ({ scrollRef }) => {
 
-    const { addToQueue, setSearchQuery, searchQuery, searchResults, setSearchResults, queryForResults, setQueryForResults } = useUser();
+    const { addToQueue, setSearchQuery, searchQuery, searchResults, setSearchResults, queryForResults, setQueryForResults, setSelectedTrackContainer } = useUser();
 
     const searchTracks = async (query) => {
         try {
@@ -55,13 +56,30 @@ const SearchView = ({ scrollRef }) => {
             
             <SearchBox onSearch={setSearchQuery} />
 
-            {searchResults.length > 0 && queryForResults && (
-                <h2 className={styles.subHeader}>Wyniki dla "{queryForResults}"</h2>
+            {searchResults && queryForResults && (
+                searchResults.tracks?.length === 0 && searchResults.albums?.length === 0 ? (
+                    <h2 className={styles.subHeader}>Brak wyników dla "{queryForResults}"</h2>
+                ) : (
+                    <>
+                        <h2 className={styles.subHeader}>Wyniki dla "{queryForResults}"</h2>
+                        <div className={styles.list}>
+                            <TrackList 
+                                data={searchResults.tracks || []}
+                                options={[{ label: 'Add to Queue', icon: addToQueueIcon, color: 'var(--spotify-green)', onClick: handleTrackAddToQueue, shouldFly: true }]}
+                            />
+                            {searchResults.albums && searchResults.albums.length > 0 && (
+                                <>
+                                    <h2 style={{ margin: '0.5rem 0' }} className={styles.subHeader}>Albumy</h2>
+                                    {searchResults.albums.map(album => (
+                                        <TrackContainerCard key={album.id} container={album} onClick={() => setSelectedTrackContainer(album)} />
+                                    ))}
+                                </>
+                            )}
+                        </div>
+                    </>
+                )
             )}
 
-            <div className={styles.list}>
-                <TrackList data={searchResults} options={[{ label: 'Add to Queue', icon: addToQueueIcon, color: 'var(--spotify-green)', onClick: handleTrackAddToQueue, shouldFly: true }]} />
-            </div>
         </div>
     );
 };

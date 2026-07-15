@@ -16,7 +16,7 @@ import SkipIcon from '../../assets/skip_icon.svg?react';
 const UserView = ({ resetTrigger }) => {
     
     const { authorized, login } = useAuth();
-    const { refreshUserQueue, setSelectedPlaylist } = useUser();
+    const { refreshUserQueue, setSelectedTrackContainer } = useUser();
     
     const { votedToSkip, handleSkip } = useParty();
     const skipVotes = usePartySelector(state => state.skipVotes);
@@ -32,7 +32,7 @@ const UserView = ({ resetTrigger }) => {
     }, [userQueueVersion]);
     useEffect(() => {
         setCurrentSubView('home');
-        setSelectedPlaylist(null);
+        setSelectedTrackContainer(null);
     }, [resetTrigger]);
 
     return (
@@ -41,9 +41,9 @@ const UserView = ({ resetTrigger }) => {
             {/* Header */}
             <header className={styles.header}>
                 <button className={styles.sidebarBtn} onClick={() => setSidebarOpen(true)}>☰</button>
-                <button className={`${styles.headerButton} ${currentSubView === 'home' ? styles.activeHeaderButton : ''}`} onClick={() => { setCurrentSubView('home'); setSelectedPlaylist(null); }}>Home</button>
-                <button className={`${styles.headerButton} ${currentSubView === 'library' ? styles.activeHeaderButton : ''}`} onClick={() => { setCurrentSubView('library'); setSelectedPlaylist(null); }}>Biblioteka</button>
-                <button className={`${styles.headerButton} ${currentSubView === 'search' ? styles.activeHeaderButton : ''}`} onClick={() => { setCurrentSubView('search'); setSelectedPlaylist(null); }}>Search</button>
+                <button className={`${styles.headerButton} ${currentSubView === 'home' ? styles.activeHeaderButton : ''}`} onClick={() => { setCurrentSubView('home'); setSelectedTrackContainer(null); }}>Home</button>
+                <button className={`${styles.headerButton} ${currentSubView === 'library' ? styles.activeHeaderButton : ''}`} onClick={() => { setCurrentSubView('library'); setSelectedTrackContainer(null); }}>Biblioteka</button>
+                <button className={`${styles.headerButton} ${currentSubView === 'search' ? styles.activeHeaderButton : ''}`} onClick={() => { setCurrentSubView('search'); setSelectedTrackContainer(null); }}>Search</button>
             </header>
 
             {/* Main Content */}

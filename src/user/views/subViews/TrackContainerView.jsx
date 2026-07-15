@@ -10,9 +10,9 @@ import addToQueueIcon from '../../../assets/add_to_queue_icon.svg';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-const PlaylistDetailsView = ({ onBack }) => {
+const TrackContainerView = ({ onBack }) => {
     
-    const { selectedPlaylist, addToQueue } = useUser();
+    const { selectedTrackContainer, addToQueue } = useUser();
 
     const TRACKS_RETURN_LIMIT = 50; // backend returns 50 tracks per request
     const [tracks, setTracks] = useState([]);
@@ -23,15 +23,16 @@ const PlaylistDetailsView = ({ onBack }) => {
     const sentinelRef = useRef(null);
 
 
-    const downloadPlaylistItems = useCallback(async () => {
+    const downloadContainerItems = useCallback(async () => {
         if (downloadingRef.current) return; // already loading
-        if (offset > selectedPlaylist.totalTracks) return; // all tracks loaded
+        if (offset > selectedTrackContainer.totalTracks) return; // all tracks loaded
 
         downloadingRef.current = true;
         setLoadingData(true);
 
         try {
-            const res = await fetch(`${API_BASE_URL}/api/spotify/playlist?playlistId=${selectedPlaylist.id}&offset=${offset}`, { 
+            const endpoint = selectedTrackContainer.type === 'PLAYLIST' ? 'playlist' : 'album';
+            const res = await fetch(`${API_BASE_URL}/api/spotify/${endpoint}?${endpoint}Id=${selectedTrackContainer.id}&offset=${offset}`, { 
                 credentials: 'include'
             });
             
@@ -46,13 +47,13 @@ const PlaylistDetailsView = ({ onBack }) => {
             downloadingRef.current = false;
             setLoadingData(false);
         }
-    }, [selectedPlaylist.id, offset]);
+    }, [selectedTrackContainer.id, offset]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             entries => {
                 if (entries[0].isIntersecting) {
-                    downloadPlaylistItems();
+                    downloadContainerItems();
                 }
             },
             { threshold: 0.1 } // active when 10% of the sentinel is visible
@@ -63,7 +64,7 @@ const PlaylistDetailsView = ({ onBack }) => {
         }
 
         return () => observer.disconnect();
-    }, [downloadPlaylistItems]);
+    }, [downloadContainerItems]);
 
     const handleTrackClick = React.useCallback((track, index) => {
         addToQueue(track.id);
@@ -75,14 +76,14 @@ const PlaylistDetailsView = ({ onBack }) => {
             <div className={styles.container}>
                 <div className={styles.playlistDataWrapper}>
                     <img 
-                        src={selectedPlaylist.imageUrl || defaultImage}
-                        alt={selectedPlaylist.name} 
+                        src={selectedTrackContainer.imageUrl || defaultImage}
+                        alt={selectedTrackContainer.name} 
                         className={styles.playlistImage} 
                     />
                     <div className={styles.playlistInfo}>
-                        <span className={styles.upperTitle}>Playlista</span>
-                        <h1 className={styles.playlistName}>{selectedPlaylist.name}</h1>
-                        <p className={styles.playlistStats}>{selectedPlaylist.totalTracks} utworów</p>
+                        <span className={styles.upperTitle}>{selectedTrackContainer.type === 'PLAYLIST' ? 'Playlista' : 'Album'}</span>
+                        <h1 className={styles.playlistName}>{selectedTrackContainer.name}</h1>
+                        <p className={styles.playlistStats}>{selectedTrackContainer.totalTracks} utworów</p>
                     </div>
                 </div>
 
@@ -107,4 +108,4 @@ const PlaylistDetailsView = ({ onBack }) => {
     );
 };
 
-export default PlaylistDetailsView;
+export default TrackContainerView;

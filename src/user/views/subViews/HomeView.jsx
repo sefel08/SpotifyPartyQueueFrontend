@@ -5,13 +5,13 @@ import { useAuth } from '../../../global/contexts/AuthContext';
 import { useUser } from '../../contexts/UserContext';
 
 import SearchBox from '../../components/SearchBox/SearchBox';
-import PlaylistCard from '../../../global/components/PlaylistCard/PlaylistCard';
+import TrackContainerCard from '../../../global/components/TrackContainerCard/TrackContainerCard';
 import PlaylistContainer from '../../../global/components/PlaylistContainer/PlaylistContainer';
 
 const HomeView = ({ setView }) => {
 
     const { user } = useAuth();
-    const { setSearchQuery, searchQuery, searchResults, setSearchResults, queryForResults, setQueryForResults, userPlaylists, setSelectedPlaylist } = useUser();
+    const { setSearchQuery, searchQuery, searchResults, setSearchResults, queryForResults, setQueryForResults, userPlaylists, setSelectedTrackContainer } = useUser();
 
     const handleSearch = (query) => {
         setSearchQuery(query);
@@ -27,7 +27,7 @@ const HomeView = ({ setView }) => {
             
             <PlaylistContainer style={ { marginBottom: '1rem' } }>
                 {userPlaylists.map((playlist) => (
-                    <PlaylistCard key={playlist.id} playlist={playlist} onClick={() => setSelectedPlaylist(playlist)} variant={"compact"} />
+                    <TrackContainerCard key={playlist.id} container={playlist} onClick={() => setSelectedTrackContainer(playlist)} variant={"compact"} />
                 ))}
             </PlaylistContainer>
 
