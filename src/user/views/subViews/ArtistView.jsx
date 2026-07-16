@@ -38,7 +38,7 @@ const ArtistView = () => {
                                 <TrackContainerCard key={album.id} container={album} onClick={() => setViewItem(album, 'container')} />
                             ))
                         ) : (
-                            <p>Brak albumów dla wybranego artysty.</p>
+                            <p>Ta funkcja na razie nie działa przez błąd w API spotify. Brak albumów dla wybranego artysty.</p>
                         )
                     )}
                 </div>
