@@ -7,7 +7,7 @@ import spotifyIcon from '../assets/spotify_icon.png';
 
 const HostView = () => {
     
-    const { fetchingHostData, partyUsers, fetchPartyUsers, removePartyUser } = useHost();
+    const { fetchingHostData, partyUsers, fetchPartyUsers, removePartyUser, skipTrack } = useHost();
 
     useEffect(() => {
         fetchPartyUsers();
@@ -54,6 +54,10 @@ const HostView = () => {
                     <p className={styles.statusText}>No users in the party yet.</p>
                 )}
             </div>
+
+            <button className={styles.skipBtn} onClick={skipTrack}>
+                Skip Current Track
+            </button>
         </div>
     );
 };

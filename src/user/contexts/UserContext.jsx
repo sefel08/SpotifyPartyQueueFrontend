@@ -156,6 +156,7 @@ export const UserProvider = ({ children }) => {
             return res.json();
         }).then(artistData => {
             setSelectedArtist(artistData);
+            setViewItem(artistData, 'artist');
         }).catch(err => console.error("Failed to fetch artist:", err));
     }
 
