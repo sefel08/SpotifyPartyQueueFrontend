@@ -92,3 +92,12 @@
   text-align: center;
   margin-top: 24px;
 }
+
+.skipBtn {
+  background-color: var(--spotify-green);
+  color: var(--spotify-white);
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 20px;
+}

@@ -42,9 +42,24 @@ export const HostProvider = ({ children }) => {
             console.error('Error removing party user:', error);
         });
     };
+    const skipTrack = () => {
+        fetch(`${API_BASE_URL}/api/party/host/skip`, {
+            method: 'POST',
+            credentials: 'include',
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error('Failed to skip track');
+            }
+            return response.json();
+        }).then((data) => {
+            console.log(data.message); // Log the success message from the server
+        }).catch((error) => {
+            console.error('Error skipping track:', error);
+        });
+    };
 
     return (
-        <HostContext.Provider value={{ fetchingHostData, partyUsers, fetchPartyUsers, removePartyUser }}>
+        <HostContext.Provider value={{ fetchingHostData, partyUsers, fetchPartyUsers, removePartyUser, skipTrack }}>
             {children}
         </HostContext.Provider>
     );
