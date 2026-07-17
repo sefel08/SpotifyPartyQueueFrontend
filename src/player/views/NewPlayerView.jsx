@@ -185,7 +185,7 @@ const NewPlayerView = ({ onlyPlayer }) => {
                         <p className={styles.modalHeader}>Do you want to leave the party?</p>
                         <motion.button
                         whileHover={{ scale: 1.05 }}
-                        onClick={() => leavePartySession()}
+                        onClick={leavePartySession}
                         className={styles.playerButton}
                         style={{ marginTop: '20px', backgroundColor: 'var(--spotify-red)', color: 'white' }}
                         >
@@ -232,7 +232,7 @@ const NewPlayerView = ({ onlyPlayer }) => {
                         <p className={styles.modalHeader}>Do you want to leave the party?</p>
                         <motion.button
                         whileHover={{ scale: 1.05 }}
-                        onClick={() => leavePartySession()}
+                        onClick={leavePartySession}
                         className={styles.playerButton}
                         style={{ marginTop: '20px', backgroundColor: 'var(--spotify-red)', color: 'white' }}
                         >

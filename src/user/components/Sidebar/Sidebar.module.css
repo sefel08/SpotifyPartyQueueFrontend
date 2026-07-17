@@ -13,6 +13,9 @@
     margin-top: auto;
     border-top: 1px solid var(--spotify-gray);
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .backButton {
@@ -29,6 +32,10 @@
     transition: color 0.2s ease, transform 0.2s ease;
     width: 100%;
     text-align: left;
+    border: 1px solid var(--spotify-light-border);
+    border-radius: 4px;
+    padding-left: 12px;
+    background-color: var(--spotify-dark-gray);
 }
 .backButton:hover {
     color: var(--spotify-white);

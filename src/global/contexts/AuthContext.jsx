@@ -85,6 +85,13 @@ export const AuthProvider = ({ children }) => {
         );
     };
 
+    const logout = () => {
+        fetch(`${API_BASE_URL}/api/user/logout`, { credentials: 'include', method: 'POST' })
+        .then(() => {
+            refreshStatus();
+        });
+    };
+
     const refreshSpotifyToken = useCallback(async () => {
         try {
             const res = await fetch(`${API_BASE_URL}/api/spotify-token`, { credentials: 'include' });
@@ -122,7 +129,7 @@ export const AuthProvider = ({ children }) => {
     }, [userRole.isPlayer, spotifyAuthorized, refreshSpotifyToken]);
 
     return (
-        <AuthContext.Provider value={{ authorized, spotifyAuthorized, loadingAuth, user, login, refreshStatus, loginAsGuest, spotifyUserToken, isPremium, hasHostPermissions, refreshSpotifyToken, userRole, wantToLogin, setWantToLogin }}>
+        <AuthContext.Provider value={{ authorized, spotifyAuthorized, loadingAuth, user, login, refreshStatus, loginAsGuest, spotifyUserToken, isPremium, hasHostPermissions, refreshSpotifyToken, userRole, wantToLogin, setWantToLogin, logout }}>
             {children}
         </AuthContext.Provider>
     );

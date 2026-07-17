@@ -191,7 +191,8 @@ export const PartyProvider = ({ children }) => {
     const leavePartySession = () => {
         fetch(`${API_BASE_URL}/api/party/leave`, {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include',
+            keepalive: true,
         })
         .then( (res) => {
             if (!res.ok) throw new Error("Failed to leave party session");
