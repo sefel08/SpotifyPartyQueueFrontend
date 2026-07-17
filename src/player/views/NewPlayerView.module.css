@@ -282,18 +282,24 @@
   }
 }
 /* TV view */
-@media (min-width: 1300px) {
+@media (min-aspect-ratio: 1.4) {
   .mainContainer {
     display: grid;
     grid-template-columns: 75% 25%;
     grid-template-rows: 90% 10%;
   }
+  
   .middleSection {
     grid-column: 1;
     grid-row: 1 / span 2;
     height: 100%;
     width: 100%;
   }
+  .albumImage {
+    width: auto;
+    height: 50%;
+  }
+
   .topSection {
     grid-column: 2;
     grid-row: 1;
@@ -308,21 +314,22 @@
     padding: 0;    
   }
   .spotifyLogo {
-    width: 60%;
+    width: 80%;
     max-width: 500px;
-    margin: calc(60% * (406 / 1483) * 0.4);
+    margin: calc(80% * (406 / 1483) * 0.4);
   }
   .modalHeader {
-    font-size: clamp(1.25rem, 2vw, 2.75rem);
+    font-size: clamp(1rem, 2vw, 2.75rem);
   }
   .modalText {
-    font-size: clamp(1.5rem, 2vw, 3rem);
+    font-size: clamp(1.2rem, 2vw, 3rem);
   }
   .mobileQRWrapper {
     display: none;
   }
   .qrCode {
-    width: 60%;
+    width: 80%;
+    margin-bottom: 5%;
     max-width: min(500px, 0.5 * 80vh);
     max-width: min(500px, 0.5 * 80dvh);
     height: auto;
